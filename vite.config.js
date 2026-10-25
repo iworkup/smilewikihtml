@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import lanHost from './scripts/lan-host.js';
 
 export default defineConfig({
   root: 'smilewikihtml',
@@ -11,11 +12,13 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5173,
     strictPort: true,
-    allowedHosts: ['macbook-pro-igor.local'],
+    allowedHosts: ['smilewikihtml.local'],
   },
   preview: {
     host: '0.0.0.0',
     port: 4173,
     strictPort: true,
+    allowedHosts: ['smilewikihtml.local'],
   },
+  plugins: [lanHost()],
 });

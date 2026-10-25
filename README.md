@@ -16,9 +16,26 @@ Vite слушает все сетевые интерфейсы. HTML автом�
 Постоянные адреса разработки:
 
 - На этом компьютере: http://localhost:5173/smilewikihtml/
-- С другого устройства в той же сети: http://MacBook-Pro-Igor.local:5173/smilewikihtml/
+- С другого устройства в той же сети: http://smilewikihtml.local:5173/smilewikihtml/
 
-Имя macOS через mDNS сохраняется при смене IP. На другом устройстве должна поддерживаться mDNS/Bonjour; устройства должны быть в одной локальной сети без изоляции клиентов, а брандмауэр должен разрешать входящие подключения Node.js. Имя компьютера менять нельзя, иначе сетевой адрес изменится. Для устройств без mDNS потребуется постоянная DHCP-резервация на роутере. Порт фиксирован: при занятости запуск завершится ошибкой, адрес сам не поменяется.
+`npm run dev` и `npm run preview` автоматически объявляют `smilewikihtml.local` через mDNS. Имя не зависит от имени компьютера или DHCP-адреса сервера. Сервер может работать на macOS, Windows или Linux; публикация выполняется npm-библиотекой, без переименования компьютера. Не запускайте копии проекта на разных компьютерах в одной сети одновременно: имя должно принадлежать одному серверу. Порты фиксированы; занятый порт вызывает ошибку.
+
+### Доступ с Windows и Linux
+
+Устройства должны находиться в одной сети без изоляции клиентов. На сервере разрешите Node.js входящие TCP 5173/4173 и mDNS UDP 5353 в частной локальной сети.
+
+- **macOS:** разрешение `.local` обычно работает через встроенный Bonjour.
+- **Windows:** откройте адрес в браузере и проверьте `curl.exe http://smilewikihtml.local:5173/smilewikihtml/`. Работа mDNS зависит от версии и сетевых политик Windows; при блокировке используйте вариант с hosts ниже.
+- **Linux:** нужен включённый mDNS resolver. Для Debian/Ubuntu с Avahi: `sudo apt install avahi-daemon libnss-mdns`, затем `sudo systemctl enable --now avahi-daemon`. В `hosts:` файла `/etc/nsswitch.conf` модуль `mdns4_minimal [NOTFOUND=return]` должен стоять перед `dns`. Проверка: `getent hosts smilewikihtml.local`. Если используется systemd-resolved, настройте mDNS в нём согласно документации дистрибутива, не смешивая настройки вслепую.
+
+**Надёжный запасной вариант для любой из этих ОС:** закрепите IP сервера DHCP-резервацией на роутере и добавьте на каждом клиенте строку `IP_СЕРВЕРА smilewikihtml.local` в hosts (подставьте реальный LAN IPv4, не 127.0.0.1):
+
+- Windows: `C:\Windows\System32\drivers\etc\hosts`, редактор от администратора; после изменения `ipconfig /flushdns`.
+- Linux/macOS: `/etc/hosts`, нужны права администратора.
+
+Это сохраняет одинаковый URL даже при отключённом mDNS. Без mDNS либо записи hosts гарантировать разрешение `.local` на произвольном Windows/Linux устройстве нельзя. Запись hosts обновляется при переносе сервера, поэтому DHCP-резервация обязательна для этого варианта.
+
+Источники: [nss-mdns](https://github.com/avahi/nss-mdns), [Avahi](https://avahi.org/).
 
 ## Сборка и предпросмотр
 
@@ -28,7 +45,7 @@ npm run preview
 ```
 
 - Локально: http://localhost:4173/smilewikihtml/
-- В локальной сети: http://MacBook-Pro-Igor.local:4173/smilewikihtml/
+- В локальной сети: http://smilewikihtml.local:4173/smilewikihtml/
 - GitHub Pages: https://iworkup.github.io/smilewikihtml/
 
 ## Структура
