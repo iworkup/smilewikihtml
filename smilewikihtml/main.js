@@ -51,6 +51,55 @@ document.querySelector('#userMenu').addEventListener('click', (event) => {
   }
 });
 
+// Shared page hierarchy for desktop and mobile, including a ten-level example.
+const navigationPages = [
+  { title: 'Главная', href: '/smilewikihtml/', current: true },
+  { title: 'Категории', href: '#articles', children: [
+    { title: 'База знаний', href: '#wiki-intro', children: [
+      { title: 'Работа с wiki', href: '#start', children: [
+        { title: 'Редактирование', href: '#editing', children: [
+          { title: 'Оформление статей', href: '#editing', children: [
+            { title: 'Источники', href: '#sources', children: [
+              { title: 'Проверка ссылок', href: '#sources', children: [
+                { title: 'Обсуждение', href: '#community', children: [
+                  { title: 'Вопросы', href: '#faq', children: [
+                    { title: 'Ответы · уровень 10', href: '#faq' },
+                  ] },
+                ] },
+              ] },
+            ] },
+          ] },
+        ] },
+      ] },
+    ] },
+  ] },
+  { title: 'О проекте', href: '#about' },
+];
+function renderNavigation(pages, depth = 1) {
+  const list = document.createElement('ul');
+  list.className = 'list-unstyled mb-0';
+  list.dataset.depth = depth;
+  if (depth > 1) list.classList.add('border-start', 'ms-1', 'ps-1');
+  pages.forEach((page) => {
+    const item = document.createElement('li');
+    const link = document.createElement('a');
+    link.className = 'nav-link d-block border-0 rounded-0 py-1 px-1 lh-sm fs-sm text-wrap text-break';
+    link.textContent = page.title;
+    link.href = page.href;
+    if (page.current) {
+      link.classList.add('active', 'fw-semibold');
+      link.setAttribute('aria-current', 'page');
+    }
+    item.append(link);
+    if (page.children?.length) item.append(renderNavigation(page.children, depth + 1));
+    list.append(item);
+  });
+  return list;
+}
+document.querySelectorAll('[data-site-navigation]').forEach((nav) => {
+  nav.replaceChildren(renderNavigation(navigationPages));
+});
+
 // Build both versions of the contents from article headings in document order.
 const pageContent = document.querySelector('#pageContent');
 const headings = [...pageContent.querySelectorAll('h2, h3')];

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SmileWiki</title>
+  <title>Smile Wiki HTML</title>
   <link rel="icon" href="data:,">
   <script>
     try {
@@ -17,7 +17,7 @@
   <!-- Topbar -->
   <nav class="navbar lg:navbar-expand bg-1 z-fixed" aria-label="Верхняя панель">
     <div class="container gap-2">
-      <a class="navbar-brand" href="/smilewikihtml/">SmileWiki</a>
+      <a class="navbar-brand" href="/smilewikihtml/">Smile Wiki HTML</a>
       <div class="d-flex align-items-center gap-2 ms-auto">
         <button class="btn-icon btn-text theme-secondary" type="button" data-bs-toggle="dialog" data-bs-target="#searchDialog" aria-label="Поиск по странице">
           <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/></svg>
@@ -64,34 +64,26 @@
           <button type="button" class="btn-close" data-bs-dismiss="drawer" aria-label="Закрыть"></button>
         </div>
         <div class="drawer-body">
-          <ul class="nav flex-column">
-            <li class="nav-item"><a class="nav-link justify-content-start active" aria-current="page" href="/smilewikihtml/">Главная</a></li>
-            <li class="nav-item"><a class="nav-link justify-content-start" href="#articles">Категории</a></li>
-            <li class="nav-item"><a class="nav-link justify-content-start" href="#about">О проекте</a></li>
-          </ul>
+          <nav data-site-navigation aria-label="Страницы сайта"></nav>
         </div>
       </dialog>
 
       <!-- Desktop sidebar -->
       <aside class="d-none lg:d-block lg:col-2" aria-label="Навигация по разделам">
         <nav class="sticky-top pt-3" aria-label="Разделы сайта">
-          <ul class="nav flex-column">
-            <li class="nav-item"><a class="nav-link justify-content-start active" aria-current="page" href="/smilewikihtml/">Главная</a></li>
-            <li class="nav-item"><a class="nav-link justify-content-start" href="#articles">Категории</a></li>
-            <li class="nav-item"><a class="nav-link justify-content-start" href="#about">О проекте</a></li>
-          </ul>
+          <div data-site-navigation></div>
         </nav>
       </aside>
 
       <!-- Main content area -->
       <div class="col-12 lg:col-8" id="pageContent">
         <button class="btn-outline theme-secondary lg:d-none mb-3" type="button" data-bs-toggle="drawer" data-bs-target="#tocDrawer" aria-controls="tocDrawer">На этой странице</button>
-        <h1 class="fs-3xl fw-bold">Добро пожаловать в SmileWiki</h1>
+        <h1 class="fs-3xl fw-bold">Smile Wiki HTML</h1>
         <p class="fs-lg fw-light">HTML-шаблон для wiki-проектов.</p>
 
         <section class="mb-3" id="about">
-          <h2 class="fs-xl">Что такое SmileWiki?</h2>
-          <p>Стартовая страница на готовых компонентах Bootstrap 6. SmileWiki — это открытый шаблон для быстрого развёртывания небольших wiki-проектов. В основе лежит идея: <strong>ничего лишнего</strong> — только семантическая вёрстка, современный фреймворк и минимум зависимостей.</p>
+          <h2 class="fs-xl">Что такое Smile Wiki HTML?</h2>
+          <p>Стартовая страница на готовых компонентах Bootstrap 6. Smile Wiki HTML — это открытый шаблон для быстрого развёртывания небольших wiki-проектов. В основе лежит идея: <strong>ничего лишнего</strong> — только семантическая вёрстка, современный фреймворк и минимум зависимостей.</p>
           <h3 class="fs-lg mt-3">Для кого этот шаблон</h3>
           <p class="mt-2">Проект подходит для:</p>
           <ul>
@@ -185,13 +177,13 @@
           <h2 class="fs-xl">Часто задаваемые вопросы (FAQ)</h2>
           <dl>
             <dt class="fw-semibold mt-2">Это готовый wiki-движок?</dt>
-            <dd>SmileWiki — HTML-шаблон интерфейса. Хранение статей, совместное редактирование и права доступа нужно реализовать отдельно.</dd>
+            <dd>Smile Wiki HTML — HTML-шаблон интерфейса. Хранение статей, совместное редактирование и права доступа нужно реализовать отдельно.</dd>
             <dt class="fw-semibold mt-2">Как добавить новую страницу?</dt>
             <dd>Создайте HTML-файл в папке <code>smilewikihtml/</code>, подключите <code>main.js</code> и добавьте ссылку в навигацию. Для статей используйте заголовки, абзацы и списки.</dd>
             <dt class="fw-semibold mt-2">Поддерживает ли шаблон тёмную тему?</dt>
             <dd>Да. Bootstrap 6 поддерживает data-bs-theme. Переключение реализовано через меню в верхней панели — тема сохраняется в localStorage.</dd>
             <dt class="fw-semibold mt-2">Нужен ли серверный бэкенд?</dt>
-            <dd>Нет. SmileWiki — полностью статический шаблон. Для расширенной функциональности (поиск по всем страницам, авторизация) потребуется бэкенд.</dd>
+            <dd>Нет. Smile Wiki HTML — полностью статический шаблон. Для расширенной функциональности (поиск по всем страницам, авторизация) потребуется бэкенд.</dd>
             <dt class="fw-semibold mt-2">Можно ли подключить Markdown-файлы?</dt>
             <dd>В текущей версии — нет. Однако при сборке через Vite можно подключить плагин для Markdown и рендерить <code>.md</code> напрямую.</dd>
           </dl>
@@ -199,14 +191,14 @@
 
         <section class="mb-3" id="community">
           <h2 class="fs-xl">Сообщество и поддержка</h2>
-          <p>SmileWiki — живой проект, и мы рады любой обратной связи.</p>
+          <p>Smile Wiki HTML — живой проект, и мы рады любой обратной связи.</p>
           <ul>
             <li><strong>Баг-репорты и предложения</strong> — оставляйте в Issues на GitHub;</li>
             <li><strong>Pull Requests</strong> — приветствуются: форкните репозиторий, создайте ветку и отправьте PR;</li>
             <li><strong>Вопросы</strong> — описывайте с примерами: ожидаемое поведение, фактический результат и шаги воспроизведения;</li>
             <li><strong>Документация</strong> — <code>README.md</code> в корне проекта содержит инструкции по сборке и настройке.</li>
           </ul>
-          <p class="mb-0">Вместе мы сделаем SmileWiki удобным инструментом для всех.</p>
+          <p class="mb-0">Вместе мы сделаем Smile Wiki HTML удобным инструментом для всех.</p>
         </section>
       </div>
       <aside class="d-none lg:d-block lg:col-2" aria-label="Оглавление страницы">
@@ -225,7 +217,7 @@
     <div class="dialog-body">
       <form class="d-flex gap-2 mb-3" role="search" id="siteSearch">
         <label class="visually-hidden" for="searchInput">Поисковый запрос</label>
-        <input class="form-control" type="search" id="searchInput" placeholder="Поиск по SmileWiki" autocomplete="off" autofocus>
+        <input class="form-control" type="search" id="searchInput" placeholder="Поиск по Smile Wiki HTML" autocomplete="off" autofocus>
         <button class="btn-solid theme-primary" type="submit">Найти</button>
       </form>
     <section id="searchResults" class="mb-3 d-none" aria-labelledby="searchResultsTitle">
@@ -249,7 +241,7 @@
   <!-- Footer -->
   <footer class="bg-1 border-top py-3 mt-auto">
     <div class="container d-flex flex-wrap justify-content-between align-items-center">
-      <span class="fs-sm">&copy; 2026 SmileWiki</span>
+      <span class="fs-sm">&copy; 2026 Smile Wiki HTML</span>
       <span class="fs-sm">Bootstrap 6 &middot; Vite</span>
     </div>
   </footer>
