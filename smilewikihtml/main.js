@@ -1,4 +1,4 @@
-import 'bootstrap';
+import { Collapse } from 'bootstrap';
 const themeLabels = { light: 'светлая', dark: 'тёмная', auto: 'системная' };
 let selectedTheme = 'auto';
 try { selectedTheme = localStorage.getItem('smilewiki-theme') || 'auto'; } catch {}
@@ -86,7 +86,6 @@ function fitDesktopMenus() {
   const heights = desktopMenus.map((menu) => Math.max(0, bottom - Math.max(0, menu.getBoundingClientRect().top)));
   desktopMenus.forEach((menu, index) => {
     menu.style.maxHeight = `${heights[index]}px`;
-    centerActiveLink(menu);
   });
 }
 let menuResizeFrame;
@@ -106,6 +105,56 @@ menuSizeObserver.observe(document.querySelector('body'));
 document.querySelectorAll('[data-site-navigation]').forEach((nav) => menuSizeObserver.observe(nav));
 window.addEventListener('pageshow', scheduleMenuResize);
 fitDesktopMenus();
+
+// Carry the current tree across a normal same-tab navigation without changing it.
+document.addEventListener('click', (event) => {
+  const link = event.target.closest('a[href]');
+  if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || link.hasAttribute('download') || (link.target && link.target !== '_self')) return;
+  const destination = new URL(link.href);
+  if (destination.origin !== location.origin || destination.pathname === location.pathname) return;
+  const nav = link.closest('[data-site-navigation]') || document.querySelector('aside [data-site-navigation]');
+  if (!nav) return;
+  const menu = nav.closest('.drawer-body') || nav;
+  try {
+    sessionStorage.setItem('smilewiki-navigation-transfer', JSON.stringify({
+      destination: destination.pathname,
+      time: Date.now(),
+      open: [...nav.querySelectorAll('[data-navigation-href].show')].map((branch) => branch.dataset.navigationHref),
+      scroll: menu.scrollTop,
+    }));
+  } catch {}
+});
+
+async function settleNavigation() {
+  const transferred = [...document.querySelectorAll('[data-navigation-transfer]')];
+  try { sessionStorage.removeItem('smilewiki-navigation-transfer'); } catch {}
+  for (const nav of transferred) {
+    const menu = nav.closest('.drawer-body') || nav;
+    menu.scrollTop = Number(nav.dataset.navigationScroll) || 0;
+  }
+  if (!transferred.length) {
+    desktopMenus.forEach(centerActiveLink);
+    return;
+  }
+  // Paint the previous tree first; only the destination document animates it.
+  await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  const branches = transferred.flatMap((nav) => [...nav.querySelectorAll('[data-navigation-desired]')]);
+  await Promise.all(branches.filter((branch) => branch.dataset.navigationDesired === 'false' && branch.classList.contains('show'))
+    .map((branch) => Collapse.getOrCreateInstance(branch, { toggle: false }).hide()));
+  await Promise.all(branches.filter((branch) => branch.dataset.navigationDesired === 'true' && !branch.classList.contains('show'))
+    .map((branch) => Collapse.getOrCreateInstance(branch, { toggle: false }).show()));
+  desktopMenus.forEach((menu) => {
+    const active = menu.querySelector('.nav-link.active');
+    if (!active) return;
+    const rect = active.getBoundingClientRect();
+    const bounds = menu.getBoundingClientRect();
+    if (rect.top < bounds.top || rect.bottom > bounds.bottom) {
+      menu.scrollTo({ top: menu.scrollTop + rect.top - bounds.top - (menu.clientHeight - rect.height) / 2,
+        behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+    }
+  });
+}
+settleNavigation();
 
 // Search in sections and article list items.
 const searchInput = document.querySelector('#searchInput');
