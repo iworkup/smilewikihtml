@@ -79,13 +79,26 @@ function centerActiveLink(menu) {
 }
 
 // Keep each desktop menu inside the visible viewport, including above the fold.
-const desktopMenus = [...document.querySelectorAll('aside > nav.sticky-top')];
+const desktopMenus = [...document.querySelectorAll('[data-desktop-menu]')];
+const topbar = document.querySelector('nav.navbar');
+const footer = document.querySelector('footer');
 function fitDesktopMenus() {
   const viewport = window.visualViewport;
-  const bottom = viewport ? viewport.offsetTop + viewport.height : window.innerHeight;
-  const heights = desktopMenus.map((menu) => Math.max(0, bottom - Math.max(0, menu.getBoundingClientRect().top)));
-  desktopMenus.forEach((menu, index) => {
-    menu.style.maxHeight = `${heights[index]}px`;
+  const viewportTop = viewport?.offsetTop ?? 0;
+  const viewportBottom = viewportTop + (viewport?.height ?? window.innerHeight);
+  const bottom = Math.min(viewportBottom, footer.getBoundingClientRect().top);
+  const top = Math.max(viewportTop, topbar.getBoundingClientRect().bottom);
+  desktopMenus.forEach((menu) => {
+    const column = menu.parentElement;
+    if (!column.getClientRects().length) return;
+    const rect = column.getBoundingClientRect();
+    const style = getComputedStyle(column);
+    const paddingLeft = parseFloat(style.paddingLeft);
+    const paddingRight = parseFloat(style.paddingRight);
+    menu.style.top = `${top}px`;
+    menu.style.left = `${rect.left + paddingLeft}px`;
+    menu.style.width = `${Math.max(0, rect.width - paddingLeft - paddingRight)}px`;
+    menu.style.height = `${Math.max(0, bottom - top)}px`;
   });
 }
 let menuResizeFrame;
@@ -102,6 +115,8 @@ window.visualViewport?.addEventListener('resize', scheduleMenuResize);
 window.visualViewport?.addEventListener('scroll', scheduleMenuResize);
 const menuSizeObserver = new ResizeObserver(scheduleMenuResize);
 menuSizeObserver.observe(document.querySelector('body'));
+menuSizeObserver.observe(topbar);
+menuSizeObserver.observe(footer);
 document.querySelectorAll('[data-site-navigation]').forEach((nav) => menuSizeObserver.observe(nav));
 window.addEventListener('pageshow', scheduleMenuResize);
 fitDesktopMenus();
