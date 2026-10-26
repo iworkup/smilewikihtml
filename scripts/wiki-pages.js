@@ -41,6 +41,7 @@ function injectNavigationAndToc(html, currentPath) {
   const headings = [];
   html = html.replace(/(<div[^>]+id="pageContent">)([\s\S]*?)(\n      <\/div>)/, (_, start, content, end) => {
     content = content.replace(/<(h[23])(\b[^>]*?)>([\s\S]*?)<\/\1>/gi, (match, tag, attrs, body) => {
+      if (currentPath === '/smilewikihtml/text.html' && /\bdata-typography-example\b/.test(attrs)) return match;
       const text = body.replace(/<[^>]*>/g, '').trim();
       let id = attrs.match(/\bid="([^"]+)"/)?.[1];
       if (!id) {
@@ -71,11 +72,11 @@ function renderArticleContent(template, page) {
     ? `<p>Примеры текстовых элементов, используемых в проекте.</p>
         <section class="mb-3" id="headings">
           <h2>Заголовки</h2>
-          <p>Шесть уровней заголовков: от h1 до h6. Под каждым примером приведён его HTML-код.</p>
+          <p>Шесть уровней заголовков: от h1 до h6. HTML-код всех примеров приведён ниже.</p>
           ${[1, 2, 3, 4, 5, 6].map((level) => {
-            const example = `<h${level}>Заголовок ${level}-го уровня</h${level}>`;
-            return `<div class="mb-4">${example}<pre class="p-3 bg-2 border rounded"><code>${escape(example)}</code></pre></div>`;
+            return `<h${level} data-typography-example>Заголовок ${level}-го уровня</h${level}>`;
           }).join('\n          ')}
+          <pre class="mt-4 p-3 bg-2 border rounded"><code>${[1, 2, 3, 4, 5, 6].map((level) => `<span class="fg-primary">${escape(`<h${level}>`)}</span>Заголовок ${level}-го уровня<span class="fg-primary">${escape(`</h${level}>`)}</span>`).join('\n')}</code></pre>
         </section>`
     : `<section class="mb-3" id="overview">
           <h2 class="fs-xl">Об этой странице</h2>
