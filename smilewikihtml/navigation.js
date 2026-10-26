@@ -1,5 +1,8 @@
 export const navigationPages = [
   { title: 'Главная', href: '/smilewikihtml/' },
+  { type: 'section', id: 'design-system', title: 'Дизайн-система', children: [
+    { title: 'Текст', href: '/smilewikihtml/text.html' },
+  ] },
   { type: 'section', id: 'knowledge-base', title: 'База знаний', children: [
     { title: 'Категории статей и подробные руководства по работе с базой знаний', href: '/smilewikihtml/articles.html', children: [
       { title: 'База знаний: организация материалов и навигация по разделам проекта', href: '/smilewikihtml/knowledge-base.html' },
