@@ -42,10 +42,8 @@ document.querySelector('#userMenu').addEventListener('click', (event) => {
   status.classList.add('d-none');
   if (action === 'login') setCurrentUser({ name: 'Пользователь' });
   else if (action === 'logout') setCurrentUser(null);
-  else {
-    status.textContent = action === 'profile'
-      ? 'Профиль пользователя: демонстрационное состояние шаблона.'
-      : 'Регистрация: демонстрационный пункт шаблона. Для просмотра состояния пользователя нажмите «Войти».';
+  else if (action === 'register') {
+    status.textContent = 'Регистрация: демонстрационный пункт шаблона. Для просмотра состояния пользователя нажмите «Войти».';
     status.classList.remove('d-none');
   }
 });
