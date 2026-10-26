@@ -98,6 +98,19 @@ const inlineTextExample = `<p>Это обычный параграф текст�
 <p><strong>Это важный текст, выделенный полужирным.</strong></p>
 <p><em>Это текст с логическим ударением, выделенный курсивом.</em></p>`;
 
+const blockquoteExample = `<blockquote class="blockquote">
+  <p>Это пример цитаты из другого источника.</p>
+</blockquote>`;
+
+const sourcedBlockquoteExample = `<figure class="blockquote">
+  <blockquote>
+    <p>Это пример цитаты с указанием автора и источника.</p>
+  </blockquote>
+  <figcaption class="blockquote-footer">
+    Имя автора, <cite title="Название произведения">Название произведения</cite>
+  </figcaption>
+</figure>`;
+
 async function renderArticleContent(template, page) {
   const title = escape(page.title);
   const pageActions = template.match(/<div\b[^>]*id="pageActions"[^>]*>[\s\S]*?<\/div>/)?.[0];
@@ -117,6 +130,13 @@ async function renderArticleContent(template, page) {
           <h2>Стандартное оформление текста</h2>
           <p>Параграфы, перенос строки и стандартные HTML-элементы оформления текста.</p>
           ${await renderCodeCard(inlineTextExample, inlineTextExample, 'Стандартное оформление текста')}
+        </section>
+        <section class="mb-3" id="blockquotes">
+          <h2>Цитаты</h2>
+          <h3>Обычная цитата</h3>
+          ${await renderCodeCard(blockquoteExample, blockquoteExample, 'Обычная цитата')}
+          <h3 class="mt-4">Цитата с источником</h3>
+          ${await renderCodeCard(sourcedBlockquoteExample, sourcedBlockquoteExample, 'Цитата с источником')}
         </section>`
     : `<section class="mb-3" id="overview">
           <h2 class="fs-xl">Об этой странице</h2>
