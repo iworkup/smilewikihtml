@@ -51,6 +51,30 @@ document.querySelector('#userMenu').addEventListener('click', (event) => {
   }
 });
 
+// Build both versions of the contents from article headings in document order.
+const pageContent = document.querySelector('#pageContent');
+const headings = [...pageContent.querySelectorAll('h2, h3')];
+const usedIds = new Set([...document.querySelectorAll('[id]')].map((element) => element.id));
+headings.forEach((heading) => {
+  if (heading.id) return;
+  const slug = heading.textContent.trim().toLocaleLowerCase('ru')
+    .replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-+|-+$/g, '') || 'section';
+  let id = slug;
+  for (let suffix = 2; usedIds.has(id); suffix++) id = `${slug}-${suffix}`;
+  heading.id = id;
+  usedIds.add(id);
+});
+document.querySelectorAll('[data-page-toc]').forEach((nav) => {
+  nav.replaceChildren(...headings.map((heading) => {
+    const link = document.createElement('a');
+    link.className = 'nav-link justify-content-start';
+    if (heading.tagName === 'H3') link.classList.add('ms-3');
+    link.href = `#${encodeURIComponent(heading.id)}`;
+    link.textContent = heading.textContent.trim();
+    return link;
+  }));
+});
+
 const searchInput = document.querySelector('#searchInput');
 const searchable = [...document.querySelectorAll('#main-content section[id]')].map((element) => ({
   id: element.id,
@@ -88,12 +112,12 @@ searchInput.addEventListener('input', search);
 // Let Bootstrap finish closing an overlay before moving focus to its target.
 function followSectionLink(event) {
   const link = event.target.closest('a[href^="#"]');
-  const target = link && document.getElementById(link.hash.slice(1));
+  const target = link && document.getElementById(decodeURIComponent(link.hash.slice(1)));
   if (!target) return;
   const overlay = event.currentTarget;
   event.preventDefault();
   const navigate = () => {
-    if (target.id === 'start' && !document.querySelector('#quickStart').classList.contains('show')) {
+    if ((target.id === 'start' || target.closest('#quickStart')) && !document.querySelector('#quickStart').classList.contains('show')) {
       document.querySelector('[data-bs-target="#quickStart"]').click();
     }
     history.replaceState(null, '', link.hash);

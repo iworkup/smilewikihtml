@@ -11,7 +11,7 @@
       if (theme === 'light' || theme === 'dark') document.documentElement.dataset.bsTheme = theme;
     } catch {}
   </script>
-  <script type="module" crossorigin src="/smilewikihtml/assets/index-Djz038YX.js"></script>
+  <script type="module" crossorigin src="/smilewikihtml/assets/index-uq7UcqA5.js"></script>
   <link rel="stylesheet" crossorigin href="/smilewikihtml/assets/index-CmdJYvuw.css">
 </head>
 <body class="d-flex flex-column min-vh-100" data-bs-spy="scroll" data-bs-target="#pageNav">
@@ -87,7 +87,7 @@
       </aside>
 
       <!-- Main content area -->
-      <div class="col-12 lg:col-7">
+      <div class="col-12 lg:col-7" id="pageContent">
         <button class="btn-outline theme-secondary lg:d-none mb-3" type="button" data-bs-toggle="drawer" data-bs-target="#tocDrawer" aria-controls="tocDrawer">На этой странице</button>
         <h1 class="fs-3xl fw-bold">Добро пожаловать в SmileWiki</h1>
         <p class="fs-lg fw-light">HTML-шаблон для wiki-проектов.</p>
@@ -96,6 +96,7 @@
           <div class="card-body">
             <h2 class="fs-xl">Что такое SmileWiki?</h2>
             <p class="card-text">Стартовая страница на готовых компонентах Bootstrap 6. SmileWiki — это открытый шаблон для быстрого развёртывания небольших wiki-проектов. В основе лежит идея: <strong>ничего лишнего</strong> — только семантическая вёрстка, современный фреймворк и минимум зависимостей.</p>
+            <h3 class="fs-lg mt-3">Для кого этот шаблон</h3>
             <p class="card-text mt-2">Проект подходит для:</p>
             <ul>
               <li>документации внутренних инструментов команды;</li>
@@ -149,6 +150,7 @@
           <div class="card-body">
             <h2 class="fs-xl">Что такое wiki и зачем она нужна?</h2>
             <p>Wiki (гав. «быстро») — это веб-сайт, который пользователи могут <strong>сами редактировать</strong> прямо через браузер. Идея принадлежит Уорду Каннингему, запустившему первый вики-движок WikiWikiWeb в 1995 году.</p>
+            <h3 class="fs-lg mt-3">Где используют wiki</h3>
             <p>Сегодня wiki — стандарт для:</p>
             <ul>
               <li><strong>корпоративной документации</strong> (Confluence, Notion, внутренние базы знаний);</li>
@@ -164,7 +166,7 @@
           <div class="card-body">
             <h2 class="fs-xl">Редактирование и форматирование</h2>
             <p>Страницы wiki обычно пишут на упрощённом языке разметки — <strong>Markdown</strong> или <strong>WikiText</strong>. Это позволяет автору сосредоточиться на содержании, а не на HTML-тегах.</p>
-            <p class="fw-semibold">Основные возможности редактора:</p>
+            <h3 class="fs-lg mt-3">Возможности редактора</h3>
             <ul>
               <li>заголовки нескольких уровней (<code>#</code>, <code>##</code>, <code>###</code>);</li>
               <li>списки — маркированные и нумерованные;</li>
@@ -172,6 +174,7 @@
               <li>вставка изображений, таблиц и кода;</li>
               <li>предпросмотр перед сохранением.</li>
             </ul>
+            <h3 class="fs-lg mt-3">История изменений</h3>
             <p class="mb-0">Большинство wiki-движков хранят историю изменений (<strong>diff</strong>), позволяя откатить правку или посмотреть, кто и когда менял страницу.</p>
           </div>
         </section>
@@ -186,7 +189,7 @@
               <li>избегать ссылок на блоги и форумы без дополнительной верификации;</li>
               <li>использовать <strong>архивные копии</strong> (Wayback Machine) для нестабильных URL.</li>
             </ul>
-            <p class="fw-semibold mt-3">Ресурсы для wiki-авторов:</p>
+            <h3 class="fs-lg mt-3">Ресурсы для авторов</h3>
             <ul>
               <li><a href="https://getbootstrap.com/docs/6.0/">Bootstrap 6 Documentation</a> — компоненты и утилиты;</li>
               <li><a href="https://www.markdownguide.org/">Markdown Guide</a> — справочник по разметке;</li>
@@ -231,14 +234,7 @@
       <aside class="d-none lg:d-block lg:col-2" aria-label="Оглавление страницы">
         <nav id="pageNav" class="nav flex-column sticky-top pt-3">
           <h2 class="fs-md fw-semibold">На этой странице</h2>
-          <a class="nav-link justify-content-start" href="#about">О проекте</a>
-          <a class="nav-link justify-content-start" href="#start">Быстрый старт</a>
-          <a class="nav-link justify-content-start" href="#articles">Категории статей</a>
-          <a class="nav-link justify-content-start" href="#wiki-intro">Что такое wiki</a>
-          <a class="nav-link justify-content-start" href="#editing">Редактирование</a>
-          <a class="nav-link justify-content-start" href="#sources">Источники</a>
-          <a class="nav-link justify-content-start" href="#faq">FAQ</a>
-          <a class="nav-link justify-content-start" href="#community">Сообщество</a>
+          <div class="nav flex-column" data-page-toc></div>
         </nav>
       </aside>
     </div>
@@ -270,16 +266,7 @@
       <button class="btn-close" type="button" data-bs-dismiss="drawer" aria-label="Закрыть оглавление"></button>
     </div>
     <div class="drawer-body">
-      <nav class="nav flex-column" aria-label="Оглавление">
-        <a class="nav-link justify-content-start" href="#about">О проекте</a>
-        <a class="nav-link justify-content-start" href="#start">Быстрый старт</a>
-        <a class="nav-link justify-content-start" href="#articles">Категории статей</a>
-        <a class="nav-link justify-content-start" href="#wiki-intro">Что такое wiki</a>
-        <a class="nav-link justify-content-start" href="#editing">Редактирование</a>
-        <a class="nav-link justify-content-start" href="#sources">Источники</a>
-        <a class="nav-link justify-content-start" href="#faq">FAQ</a>
-        <a class="nav-link justify-content-start" href="#community">Сообщество</a>
-      </nav>
+      <nav class="nav flex-column" aria-label="Оглавление" data-page-toc></nav>
     </div>
   </dialog>
 
