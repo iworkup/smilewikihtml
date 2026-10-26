@@ -15,7 +15,7 @@ function render(template, page) {
         <h1 class="fs-3xl fw-bold text-break">${title}</h1>
         <section class="mb-3" id="overview">
           <h2 class="fs-xl">Об этой странице</h2>
-          <p>Демонстрационная отдельная страница wiki: ${title}. Замените этот текст содержимым статьи.</p>
+          <p class="text-break">Демонстрационная отдельная страница wiki: ${title}. Замените этот текст содержимым статьи.</p>
           <p><a href="/smilewikihtml/">Главная страница</a></p>
         </section>$2`);
 }
