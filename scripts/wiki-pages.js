@@ -143,22 +143,6 @@ const orderedListExample = `<ol>
   <li>Сохраните результат.</li>
 </ol>`;
 
-const numberedListGroupExample = `<ol class="list-group list-group-numbered">
-  <li class="list-group-item">Первый пункт
-    <ol class="list-group list-group-numbered mt-2">
-      <li class="list-group-item">Вложенный пункт
-        <ol class="list-group list-group-numbered mt-2">
-          <li class="list-group-item">Пункт третьего уровня</li>
-          <li class="list-group-item">Ещё один пункт третьего уровня</li>
-        </ol>
-      </li>
-      <li class="list-group-item">Ещё один вложенный пункт</li>
-    </ol>
-  </li>
-  <li class="list-group-item">Второй пункт</li>
-  <li class="list-group-item">Третий пункт</li>
-</ol>`;
-
 async function renderArticleContent(template, page) {
   const title = escape(page.title);
   const pageActions = template.match(/<div\b[^>]*id="pageActions"[^>]*>[\s\S]*?<\/div>/)?.[0];
@@ -192,11 +176,6 @@ async function renderArticleContent(template, page) {
           ${await renderCodeCard(unorderedListExample, unorderedListExample, 'Маркированный список')}
           <h3 class="mt-4">Нумерованный список</h3>
           ${await renderCodeCard(orderedListExample, orderedListExample, 'Нумерованный список')}
-        </section>
-        <section class="mb-3" id="list-group">
-          <h2>List Group</h2>
-          <p>Вложенная нумерованная группа: 1., 1.1., 1.1.1.</p>
-          ${await renderCodeCard(numberedListGroupExample, numberedListGroupExample, 'Вложенный List Group')}
         </section>`
     : `<section class="mb-3" id="overview">
           <h2 class="fs-xl">Об этой странице</h2>
