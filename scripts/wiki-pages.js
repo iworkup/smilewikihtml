@@ -1,5 +1,6 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { restoreNavigation } from './navigation-state.js';
 import { navigationPages } from '../smilewikihtml/navigation.js';
 
 const allPages = navigationPages.flatMap(function flatten(page) {
@@ -47,7 +48,7 @@ function injectNavigationAndToc(html, currentPath) {
     return start + content + end;
   });
   let navIndex = 0;
-  html = html.replace(/(<(nav|div)\b[^>]*data-site-navigation[^>]*>)\s*<\/\2>/g, (_, start, tag) => `${start}<!-- generated:navigation:start -->${buildNavigationHtml(navigationPages, currentPath, navIndex++)}<!-- generated:navigation:end --></${tag}>`);
+  html = html.replace(/(<(nav|div)\b[^>]*data-site-navigation[^>]*>)\s*<\/\2>/g, (_, start, tag) => `${start}<!-- generated:navigation:start -->${buildNavigationHtml(navigationPages, currentPath, navIndex++)}<script>(${restoreNavigation.toString()})();</script><!-- generated:navigation:end --></${tag}>`);
   const toc = headings.map(({ tag, id, text }) => `<a class="nav-link justify-content-start py-1 px-2 lh-sm fs-sm text-wrap rounded-0 ${tag === 'h3' ? 'ms-3 border-start border-2 border-top-0 border-end-0 border-bottom-0' : 'border-0'}" href="#${encodeURIComponent(id)}">${text}</a>`).join('');
   return html.replace(/(<(nav|div)\b[^>]*data-page-toc[^>]*>)\s*<\/\2>/g, (_, start, tag) => `${start}<!-- generated:toc:start -->${toc}<!-- generated:toc:end --></${tag}>`);
 }

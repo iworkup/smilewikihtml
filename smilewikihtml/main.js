@@ -62,6 +62,12 @@ document.querySelectorAll('[data-site-navigation]').forEach((nav) => {
     nav.addEventListener(eventName, (event) => {
       const href = event.target.dataset.navigationHref;
       if (!href) return;
+      // Remember the intended state even while Collapse is still transitioning.
+      try {
+        const state = JSON.parse(sessionStorage.getItem('smilewiki-navigation') || '{}') || {};
+        state[href] = expanded;
+        sessionStorage.setItem('smilewiki-navigation', JSON.stringify(state));
+      } catch {}
       document.querySelectorAll('[data-navigation-toggle]').forEach((button) => {
         if (button.dataset.navigationToggle === href) updateBranchToggle(button, expanded);
       });
