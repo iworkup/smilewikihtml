@@ -8,7 +8,7 @@ themeSwitch.addEventListener('change', () => {
   try { localStorage.setItem('smilewiki-theme', theme); } catch {}
 });
 
-// The application supplies the confirmed session; never infer authentication from storage.
+// Local template preview: switch between guest and user states without a server.
 export function setCurrentUser(user) {
   const signedIn = typeof user?.name === 'string' && user.name.trim().length > 0;
   document.querySelector('#userName').textContent = signedIn ? user.name : 'Авторизация';
@@ -21,16 +21,20 @@ export function setCurrentUser(user) {
   });
 }
 setCurrentUser(null);
-window.addEventListener('smilewiki:session', (event) => setCurrentUser(event.detail));
 document.querySelector('#userMenu').addEventListener('click', (event) => {
   const item = event.target.closest('[data-auth-action]');
   if (!item) return;
-  const handled = !window.dispatchEvent(new CustomEvent('smilewiki:auth', {
-    detail: { action: item.dataset.authAction }, cancelable: true,
-  }));
+  const action = item.dataset.authAction;
   const status = document.querySelector('#topbarStatus');
-  status.classList.toggle('d-none', handled);
-  if (!handled) status.textContent = `${item.textContent}: требуется подключение сервера авторизации.`;
+  status.classList.add('d-none');
+  if (action === 'login') setCurrentUser({ name: 'Пользователь' });
+  else if (action === 'logout') setCurrentUser(null);
+  else {
+    status.textContent = action === 'profile'
+      ? 'Профиль пользователя: демонстрационное состояние шаблона.'
+      : 'Регистрация: демонстрационный пункт шаблона. Для просмотра состояния пользователя нажмите «Войти».';
+    status.classList.remove('d-none');
+  }
 });
 
 const searchInput = document.querySelector('#searchInput');
