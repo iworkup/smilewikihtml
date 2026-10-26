@@ -1,6 +1,6 @@
 import { navigationPages } from './navigation.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import { Collapse } from 'bootstrap';
 const themeLabels = { light: 'светлая', dark: 'тёмная', auto: 'системная' };
 let selectedTheme = 'auto';
 try { selectedTheme = localStorage.getItem('smilewiki-theme') || 'auto'; } catch {}
@@ -52,31 +52,90 @@ document.querySelector('#userMenu').addEventListener('click', (event) => {
   }
 });
 
-// Shared page hierarchy for desktop and mobile, including a ten-level example.
+// Shared hierarchy: open ancestors and the current page's immediate children.
+const currentPath = location.pathname.replace(/index\.html$/, '');
+const initiallyOpenBranches = new Set();
+function markActiveBranch(pages) {
+  let containsCurrent = false;
+  for (const page of pages) {
+    const childIsActive = markActiveBranch(page.children || []);
+    const isActive = new URL(page.href, location.origin).pathname === currentPath;
+    if (page.children?.length && (isActive || childIsActive)) initiallyOpenBranches.add(page.href);
+    containsCurrent ||= isActive || childIsActive;
+  }
+  return containsCurrent;
+}
+markActiveBranch(navigationPages);
 
-function renderNavigation(pages, depth = 1) {
+function renderNavigation(pages, navIndex, path = []) {
   const list = document.createElement('ul');
   list.className = 'nav d-block list-unstyled mb-0';
-  list.dataset.depth = depth;
-  if (depth > 1) list.classList.add('border-start', 'ms-1', 'ps-1');
-  pages.forEach((page) => {
+  list.dataset.depth = path.length + 1;
+  if (path.length) list.classList.add('border-start', 'ms-1', 'ps-1');
+  pages.forEach((page, index) => {
     const item = document.createElement('li');
+    const row = document.createElement('div');
+    row.className = 'd-flex align-items-start';
     const link = document.createElement('a');
-    link.className = 'nav-link d-block border-0 rounded-0 py-1 px-2 lh-sm fs-sm text-wrap text-break';
+    link.className = 'nav-link d-block border-0 rounded-0 py-1 px-2 lh-sm fs-sm text-wrap text-break flex-grow-1 min-w-0';
     link.textContent = page.title;
     link.href = page.href;
-    if (new URL(page.href, location.origin).pathname === location.pathname.replace(/index\.html$/, '')) {
+    if (new URL(page.href, location.origin).pathname === currentPath) {
       link.classList.add('active');
       link.setAttribute('aria-current', 'page');
     }
-    item.append(link);
-    if (page.children?.length) item.append(renderNavigation(page.children, depth + 1));
+    row.append(link);
+    item.append(row);
+    if (page.children?.length) {
+      const childPath = [...path, index];
+      const branchClass = `navigation-branch-${childPath.join('-')}`;
+      const branch = document.createElement('div');
+      branch.id = `navigation-${navIndex}-${childPath.join('-')}`;
+      branch.className = `collapse transition-none ${branchClass}`;
+      branch.classList.toggle('show', initiallyOpenBranches.has(page.href));
+      branch.dataset.navigationHref = page.href;
+      branch.append(renderNavigation(page.children, navIndex, childPath));
+      const toggle = document.createElement('button');
+      toggle.type = 'button';
+      toggle.className = 'btn-icon btn-xs border-0 rounded-0 py-1 px-1 lh-sm fs-sm flex-shrink-0';
+      toggle.dataset.bsToggle = 'collapse';
+      toggle.dataset.bsTarget = `.${branchClass}`;
+      toggle.setAttribute('aria-controls', branch.id);
+      toggle.dataset.navigationToggle = page.href;
+      row.append(toggle);
+      updateBranchToggle(toggle, initiallyOpenBranches.has(page.href));
+      item.append(branch);
+    }
     list.append(item);
   });
   return list;
 }
-document.querySelectorAll('[data-site-navigation]').forEach((nav) => {
-  nav.replaceChildren(renderNavigation(navigationPages));
+function updateBranchToggle(button, expanded) {
+  button.textContent = expanded ? '−' : '+';
+  button.setAttribute('aria-expanded', String(expanded));
+  const pageTitle = button.previousElementSibling.textContent;
+  button.setAttribute('aria-label', `${expanded ? 'Свернуть' : 'Развернуть'} «${pageTitle}»`);
+}
+document.querySelectorAll('[data-site-navigation]').forEach((nav, index) => {
+  nav.replaceChildren(renderNavigation(navigationPages, index));
+  for (const [eventName, expanded] of [['show.bs.collapse', true], ['hide.bs.collapse', false]]) {
+    nav.addEventListener(eventName, (event) => {
+      const href = event.target.dataset.navigationHref;
+      if (!href) return;
+      document.querySelectorAll('[data-navigation-toggle]').forEach((button) => {
+        if (button.dataset.navigationToggle === href) updateBranchToggle(button, expanded);
+      });
+    });
+  }
+});
+// Reset manual expansion when Back/Forward restores a cached document.
+window.addEventListener('pageshow', (event) => {
+  if (!event.persisted) return;
+  document.querySelectorAll('[data-navigation-href]').forEach((branch) => {
+    const instance = Collapse.getOrCreateInstance(branch);
+    if (initiallyOpenBranches.has(branch.dataset.navigationHref)) instance.show();
+    else instance.hide();
+  });
 });
 
 // Scroll only the menu, leaving the article position and keyboard focus intact.
@@ -112,7 +171,10 @@ window.addEventListener('scroll', scheduleMenuResize, { passive: true });
 window.addEventListener('resize', scheduleMenuResize);
 window.visualViewport?.addEventListener('resize', scheduleMenuResize);
 window.visualViewport?.addEventListener('scroll', scheduleMenuResize);
-new ResizeObserver(scheduleMenuResize).observe(document.querySelector('body'));
+const menuSizeObserver = new ResizeObserver(scheduleMenuResize);
+menuSizeObserver.observe(document.querySelector('body'));
+document.querySelectorAll('[data-site-navigation]').forEach((nav) => menuSizeObserver.observe(nav));
+window.addEventListener('pageshow', scheduleMenuResize);
 fitDesktopMenus();
 
 // Build both versions of the contents from article headings in document order.
