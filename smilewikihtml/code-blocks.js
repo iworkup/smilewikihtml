@@ -8,10 +8,10 @@ const clipboard = new ClipboardJS('[data-copy-code]', {
 function showCopyStatus(button, message, copied = false) {
   clearTimeout(resetTimers.get(button));
   const status = button.closest('[data-code-block]').querySelector('[data-copy-status]');
-  button.textContent = copied ? 'Скопировано!' : 'Копировать';
+  button.title = copied ? 'Скопировано!' : 'Копировать код';
   status.textContent = message;
   resetTimers.set(button, setTimeout(() => {
-    button.textContent = 'Копировать';
+    button.title = 'Копировать код';
     status.textContent = '';
     resetTimers.delete(button);
   }, 4000));

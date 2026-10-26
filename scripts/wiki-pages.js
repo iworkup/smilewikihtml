@@ -80,7 +80,7 @@ async function renderArticleContent(template, page) {
           <div class="mt-4 border rounded overflow-hidden" data-code-block>
             <div class="d-flex align-items-center justify-content-between gap-2 p-2 bg-2 border-bottom">
               <span class="font-monospace fs-sm">HTML</span>
-              <button type="button" class="btn btn-sm btn-outline theme-secondary" data-copy-code aria-label="Скопировать HTML-код заголовков">Копировать</button>
+              <button type="button" class="btn btn-sm btn-icon btn-outline theme-secondary" data-copy-code aria-label="Скопировать HTML-код заголовков" title="Копировать код"><svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 1.5v1H6v-1A.5.5 0 0 1 6.5 1h3a.5.5 0 0 1 .5.5m-5 0A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5h1A2 2 0 0 1 14 3.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V3.5a2 2 0 0 1 2-2zm0 1H4a1 1 0 0 0-1 1V14a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V3.5a1 1 0 0 0-1-1h-1v1H5z"/></svg></button>
             </div>
             ${await codeToHtml([1, 2, 3, 4, 5, 6].map((level) => `<h${level}>Заголовок ${level}-го уровня</h${level}>`).join('\n'), {
               lang: 'html',
