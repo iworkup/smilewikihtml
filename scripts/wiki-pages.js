@@ -111,6 +111,18 @@ const sourcedBlockquoteExample = `<figure class="blockquote">
   </figcaption>
 </figure>`;
 
+const unorderedListExample = `<ul>
+  <li>Первый пункт списка</li>
+  <li>Второй пункт списка</li>
+  <li>Третий пункт списка</li>
+</ul>`;
+
+const orderedListExample = `<ol>
+  <li>Откройте нужную страницу.</li>
+  <li>Внесите изменения в текст.</li>
+  <li>Сохраните результат.</li>
+</ol>`;
+
 async function renderArticleContent(template, page) {
   const title = escape(page.title);
   const pageActions = template.match(/<div\b[^>]*id="pageActions"[^>]*>[\s\S]*?<\/div>/)?.[0];
@@ -137,6 +149,13 @@ async function renderArticleContent(template, page) {
           ${await renderCodeCard(blockquoteExample, blockquoteExample, 'Обычная цитата')}
           <h3 class="mt-4">Цитата с источником</h3>
           ${await renderCodeCard(sourcedBlockquoteExample, sourcedBlockquoteExample, 'Цитата с источником')}
+        </section>
+        <section class="mb-3" id="lists">
+          <h2>Списки</h2>
+          <h3>Маркированный список</h3>
+          ${await renderCodeCard(unorderedListExample, unorderedListExample, 'Маркированный список')}
+          <h3 class="mt-4">Нумерованный список</h3>
+          ${await renderCodeCard(orderedListExample, orderedListExample, 'Нумерованный список')}
         </section>`
     : `<section class="mb-3" id="overview">
           <h2 class="fs-xl">Об этой странице</h2>
