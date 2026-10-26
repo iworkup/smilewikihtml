@@ -85,12 +85,24 @@ function centerActiveLink(menu, smooth = false) {
 const desktopMenus = [...document.querySelectorAll('[data-desktop-menu]')];
 const topbar = document.querySelector('nav.navbar');
 const footer = document.querySelector('footer');
+const pageActions = document.querySelector('#pageActions');
+const backToTop = document.querySelector('#backToTop');
+const pageContent = document.querySelector('#pageContent');
+backToTop.addEventListener('click', () => {
+  window.scrollTo({
+    top: 0,
+    behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+  });
+});
 function fitDesktopMenus() {
   const viewport = window.visualViewport;
   const viewportTop = viewport?.offsetTop ?? 0;
   const viewportBottom = viewportTop + (viewport?.height ?? window.innerHeight);
   const bottom = Math.min(viewportBottom, footer.getBoundingClientRect().top);
   const top = Math.max(viewportTop, topbar.getBoundingClientRect().bottom);
+  backToTop.classList.toggle('d-none', pageContent.getBoundingClientRect().top >= top);
+  // Keep the Bootstrap margin as a gap above both the footer and visual viewport.
+  pageActions.style.bottom = `${Math.max(0, window.innerHeight - bottom)}px`;
   desktopMenus.forEach((menu) => {
     const column = menu.parentElement;
     if (!column.getClientRects().length) return;

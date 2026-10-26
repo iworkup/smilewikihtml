@@ -11,7 +11,7 @@
       if (theme === 'light' || theme === 'dark') document.documentElement.dataset.bsTheme = theme;
     } catch {}
   </script>
-  <script type="module" crossorigin src="/smilewikihtml/assets/index-CTMrGlxm.js"></script>
+  <script type="module" crossorigin src="/smilewikihtml/assets/index-BNKZ4U7P.js"></script>
   <link rel="stylesheet" crossorigin href="/smilewikihtml/assets/index-CmdJYvuw.css">
 </head>
 <body class="d-flex flex-column min-vh-100" data-bs-spy="scroll" data-bs-target="#pageNav">
@@ -134,9 +134,14 @@
 
       <!-- Main content area -->
       <div class="col-12 lg:col-10 2xl:col-8" id="pageContent">
-        <button class="btn-solid theme-secondary btn-icon lg:d-none position-fixed bottom-0 end-0 m-3 z-fixed shadow" type="button" data-bs-toggle="drawer" data-bs-target="#tocDrawer" aria-controls="tocDrawer" aria-label="На этой странице" title="На этой странице">
+        <div id="pageActions" class="position-fixed bottom-0 end-0 m-3 z-fixed d-flex gap-2">
+          <button id="backToTop" class="btn-solid theme-secondary btn-icon shadow d-none" type="button" aria-label="Наверх" title="Наверх">
+            <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5 1.5 8l1.4 1.4L7 5.3V15h2V5.3l4.1 4.1L14.5 8z"/></svg>
+          </button>
+        <button class="btn-solid theme-secondary btn-icon lg:d-none shadow" type="button" data-bs-toggle="drawer" data-bs-target="#tocDrawer" aria-controls="tocDrawer" aria-label="На этой странице" title="На этой странице">
           <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 5h12v2H2zm0 4h8v2H2z"/></svg>
         </button>
+        </div>
         <h1 class="fs-3xl fw-bold text-break">Работа с wiki: пошаговые инструкции для новых участников сообщества</h1>
         <section class="mb-3" id="overview">
           <h2 class="fs-xl" id="об-этой-странице">Об этой странице</h2>
