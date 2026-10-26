@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" data-bs-theme="dark">
+<html lang="ru">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,20 +13,24 @@
   </script>
   <script type="module" src="/main.js"></script>
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100" data-bs-spy="scroll" data-bs-target="#pageNav">
   <!-- Topbar -->
   <nav class="navbar lg:navbar-expand bg-1" aria-label="Верхняя панель">
     <div class="container gap-2">
       <a class="navbar-brand" href="/smilewikihtml/">SmileWiki</a>
-      <form class="d-flex gap-2 order-last col-12 lg:order-0 lg:col" role="search" id="siteSearch">
-        <label class="visually-hidden" for="searchInput">Поиск по странице</label>
-        <input class="form-control" type="search" id="searchInput" placeholder="Поиск по SmileWiki" autocomplete="off">
-        <button class="btn-outline theme-secondary" type="submit">Найти</button>
-      </form>
-      <div class="d-flex flex-wrap align-items-center gap-2 ms-auto">
-        <div class="d-flex align-items-center gap-2">
-          <div class="switch"><input type="checkbox" id="themeSwitch" role="switch" switch checked></div>
-          <label for="themeSwitch" class="fs-sm">Тёмная тема</label>
+      <div class="d-flex align-items-center gap-2 ms-auto">
+        <button class="btn-icon btn-text theme-secondary" type="button" data-bs-toggle="dialog" data-bs-target="#searchDialog" aria-label="Поиск по странице">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/></svg>
+        </button>
+        <div>
+          <button class="btn-icon btn-text theme-secondary" type="button" id="themeMenuToggle" data-bs-toggle="menu" data-bs-placement="bottom-end" aria-expanded="false" aria-controls="themeMenu" aria-label="Цветовая тема: системная">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16"/></svg>
+          </button>
+          <div class="menu" id="themeMenu" aria-labelledby="themeMenuToggle">
+            <button class="menu-item" type="button" data-theme="light" aria-pressed="false">Светлая</button>
+            <button class="menu-item" type="button" data-theme="dark" aria-pressed="false">Тёмная</button>
+            <button class="menu-item" type="button" data-theme="auto" aria-pressed="true">Системная</button>
+          </div>
         </div>
         <div>
           <button class="btn-text theme-secondary d-inline-flex align-items-center gap-2" type="button" id="userMenuToggle" data-bs-toggle="menu" data-bs-placement="bottom-end" aria-expanded="false" aria-controls="userMenu">
@@ -52,13 +56,6 @@
   <!-- .container > .row с левой навигацией + контентом -->
   <main class="container py-4 flex-grow-1" id="main-content">
     <p id="topbarStatus" class="d-none alert theme-info" role="status"></p>
-    <section id="searchResults" class="card mb-3 d-none" aria-labelledby="searchResultsTitle">
-      <div class="card-body">
-        <h2 id="searchResultsTitle" class="fs-xl">Результаты поиска</h2>
-        <p id="searchSummary" role="status"></p>
-        <ul id="searchResultList" class="list-group list-group-flush"></ul>
-      </div>
-    </section>
     <div class="row g-4">
 
       <!-- Left sidebar navigation — mobile: drawer, lg: колонка -->
@@ -68,30 +65,29 @@
           <button type="button" class="btn-close" data-bs-dismiss="drawer" aria-label="Закрыть"></button>
         </div>
         <div class="drawer-body">
-          <ul class="nav flex-column nav-pills">
-            <li class="nav-item"><a class="nav-link active" aria-current="page" href="/smilewikihtml/">Главная</a></li>
-            <li class="nav-item"><a class="nav-link" href="#articles">Категории</a></li>
-            <li class="nav-item"><a class="nav-link" href="#about">О проекте</a></li>
+          <ul class="nav flex-column">
+            <li class="nav-item"><a class="nav-link justify-content-start active" aria-current="page" href="/smilewikihtml/">Главная</a></li>
+            <li class="nav-item"><a class="nav-link justify-content-start" href="#articles">Категории</a></li>
+            <li class="nav-item"><a class="nav-link justify-content-start" href="#about">О проекте</a></li>
           </ul>
         </div>
       </dialog>
 
       <!-- Desktop sidebar -->
       <aside class="d-none lg:d-block lg:col-3" aria-label="Навигация по разделам">
-        <div class="card">
-          <div class="card-header">Разделы</div>
-          <div class="card-body py-2">
-            <ul class="nav flex-column nav-pills">
-              <li class="nav-item"><a class="nav-link active" aria-current="page" href="/smilewikihtml/">Главная</a></li>
-              <li class="nav-item"><a class="nav-link" href="#articles">Категории</a></li>
-              <li class="nav-item"><a class="nav-link" href="#about">О проекте</a></li>
-            </ul>
-          </div>
-        </div>
+        <nav class="sticky-top pt-3" aria-label="Разделы сайта">
+          <h2 class="fs-md fw-semibold">Разделы</h2>
+          <ul class="nav flex-column">
+            <li class="nav-item"><a class="nav-link justify-content-start active" aria-current="page" href="/smilewikihtml/">Главная</a></li>
+            <li class="nav-item"><a class="nav-link justify-content-start" href="#articles">Категории</a></li>
+            <li class="nav-item"><a class="nav-link justify-content-start" href="#about">О проекте</a></li>
+          </ul>
+        </nav>
       </aside>
 
       <!-- Main content area -->
-      <div class="lg:col-9">
+      <div class="col-12 lg:col-7">
+        <button class="btn-outline theme-secondary lg:d-none mb-3" type="button" data-bs-toggle="drawer" data-bs-target="#tocDrawer" aria-controls="tocDrawer">На этой странице</button>
         <h1 class="fs-3xl fw-bold">Добро пожаловать в SmileWiki</h1>
         <p class="fs-lg fw-light">HTML-шаблон для wiki-проектов.</p>
 
@@ -102,29 +98,71 @@
           </div>
         </section>
 
-        <div class="mb-3">
+        <section class="mb-3" id="start">
+          <h2 class="fs-xl">Быстрый старт</h2>
           <button class="btn-solid theme-primary" type="button" data-bs-toggle="collapse" data-bs-target="#quickStart" aria-expanded="false" aria-controls="quickStart">
-            Быстрый старт
+            Инструкция по запуску
           </button>
           <div class="collapse mt-2" id="quickStart">
             <div class="card card-body">
               Исходники находятся в smilewikihtml/. Изменения автоматически появляются в браузере после сохранения.
             </div>
           </div>
-        </div>
+        </section>
 
-        <div class="card">
-          <div class="card-header" id="articles">Примеры разделов</div>
+        <section class="card" id="articles" aria-labelledby="articlesTitle">
+          <div class="card-header"><h2 class="fs-xl mb-0" id="articlesTitle">Примеры разделов</h2></div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item">Как работает Bootstrap 6</li>
             <li class="list-group-item">Vite: современный сборщик</li>
             <li class="list-group-item">Основы семантической вёрстки</li>
           </ul>
-        </div>
+        </section>
       </div>
-
+      <aside class="d-none lg:d-block lg:col-2" aria-label="Оглавление страницы">
+        <nav id="pageNav" class="nav flex-column sticky-top pt-3">
+          <h2 class="fs-md fw-semibold">На этой странице</h2>
+          <a class="nav-link justify-content-start" href="#about">О проекте</a>
+          <a class="nav-link justify-content-start" href="#start">Быстрый старт</a>
+          <a class="nav-link justify-content-start" href="#articles">Примеры разделов</a>
+        </nav>
+      </aside>
     </div>
   </main>
+
+  <dialog class="dialog dialog-lg dialog-scrollable" id="searchDialog" aria-labelledby="searchDialogTitle">
+    <div class="dialog-header">
+      <h2 class="dialog-title fs-xl" id="searchDialogTitle">Поиск по странице</h2>
+      <button class="btn-close" type="button" data-bs-dismiss="dialog" aria-label="Закрыть поиск"></button>
+    </div>
+    <div class="dialog-body">
+      <form class="d-flex gap-2 mb-3" role="search" id="siteSearch">
+        <label class="visually-hidden" for="searchInput">Поисковый запрос</label>
+        <input class="form-control" type="search" id="searchInput" placeholder="Поиск по SmileWiki" autocomplete="off" autofocus>
+        <button class="btn-solid theme-primary" type="submit">Найти</button>
+      </form>
+    <section id="searchResults" class="card mb-3 d-none" aria-labelledby="searchResultsTitle">
+      <div class="card-body">
+        <h2 id="searchResultsTitle" class="fs-xl">Результаты поиска</h2>
+        <p id="searchSummary" role="status"></p>
+        <ul id="searchResultList" class="list-group list-group-flush"></ul>
+      </div>
+    </section>
+    </div>
+  </dialog>
+  <dialog class="drawer drawer-end" id="tocDrawer" aria-labelledby="tocDrawerTitle" tabindex="-1">
+    <div class="drawer-header">
+      <h2 class="drawer-title fs-xl" id="tocDrawerTitle">На этой странице</h2>
+      <button class="btn-close" type="button" data-bs-dismiss="drawer" aria-label="Закрыть оглавление"></button>
+    </div>
+    <div class="drawer-body">
+      <nav class="nav flex-column" aria-label="Оглавление">
+        <a class="nav-link justify-content-start" href="#about">О проекте</a>
+        <a class="nav-link justify-content-start" href="#start">Быстрый старт</a>
+        <a class="nav-link justify-content-start" href="#articles">Примеры разделов</a>
+      </nav>
+    </div>
+  </dialog>
 
   <!-- Footer -->
   <footer class="bg-1 border-top py-3 mt-auto">
