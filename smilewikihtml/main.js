@@ -52,7 +52,7 @@ document.querySelector('#userMenu').addEventListener('click', (event) => {
 });
 
 const searchInput = document.querySelector('#searchInput');
-const searchable = [...document.querySelectorAll('#about, #start, #articles')].map((element) => ({
+const searchable = [...document.querySelectorAll('#main-content section[id]')].map((element) => ({
   id: element.id,
   title: (element.querySelector('h2')?.textContent ?? element.textContent).trim(),
   text: element.textContent,

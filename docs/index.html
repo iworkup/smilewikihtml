@@ -11,12 +11,12 @@
       if (theme === 'light' || theme === 'dark') document.documentElement.dataset.bsTheme = theme;
     } catch {}
   </script>
-  <script type="module" crossorigin src="/smilewikihtml/assets/index-DJGixbOc.js"></script>
+  <script type="module" crossorigin src="/smilewikihtml/assets/index-Djz038YX.js"></script>
   <link rel="stylesheet" crossorigin href="/smilewikihtml/assets/index-CmdJYvuw.css">
 </head>
 <body class="d-flex flex-column min-vh-100" data-bs-spy="scroll" data-bs-target="#pageNav">
   <!-- Topbar -->
-  <nav class="navbar lg:navbar-expand bg-1" aria-label="Верхняя панель">
+  <nav class="navbar lg:navbar-expand bg-1 z-fixed" aria-label="Верхняя панель">
     <div class="container gap-2">
       <a class="navbar-brand" href="/smilewikihtml/">SmileWiki</a>
       <div class="d-flex align-items-center gap-2 ms-auto">
@@ -95,7 +95,14 @@
         <section class="card mb-3" id="about">
           <div class="card-body">
             <h2 class="fs-xl">Что такое SmileWiki?</h2>
-            <p class="card-text">Стартовая страница на готовых компонентах Bootstrap 6.</p>
+            <p class="card-text">Стартовая страница на готовых компонентах Bootstrap 6. SmileWiki — это открытый шаблон для быстрого развёртывания небольших wiki-проектов. В основе лежит идея: <strong>ничего лишнего</strong> — только семантическая вёрстка, современный фреймворк и минимум зависимостей.</p>
+            <p class="card-text mt-2">Проект подходит для:</p>
+            <ul>
+              <li>документации внутренних инструментов команды;</li>
+              <li>личной базы знаний (цифровой сад);</li>
+              <li>образовательных материалов и гайдов;</li>
+              <li>прототипов и MVP wiki-сервисов.</li>
+            </ul>
           </div>
         </section>
 
@@ -106,18 +113,119 @@
           </button>
           <div class="collapse mt-2" id="quickStart">
             <div class="card card-body">
-              Исходники находятся в smilewikihtml/. Изменения автоматически появляются в браузере после сохранения.
+              <p>Исходники находятся в <code>smilewikihtml/</code>. Изменения автоматически появляются в браузере после сохранения.</p>
+              <ol class="mb-0">
+                <li>Установите зависимости: <code>npm ci</code></li>
+                <li>Запустите dev-сервер: <code>npm run dev</code></li>
+                <li>Откройте <a href="http://smilewikihtml.local:5173/smilewikihtml/">smilewikihtml.local:5173</a></li>
+                <li>Редактируйте файлы в <code>smilewikihtml/</code> — браузер обновится сам.</li>
+              </ol>
             </div>
           </div>
         </section>
 
-        <section class="card" id="articles" aria-labelledby="articlesTitle">
-          <div class="card-header"><h2 class="fs-xl mb-0" id="articlesTitle">Примеры разделов</h2></div>
+        <section class="card mb-3" id="articles" aria-labelledby="articlesTitle">
+          <div class="card-header"><h2 class="fs-xl mb-0" id="articlesTitle">Категории статей</h2></div>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">Как работает Bootstrap 6</li>
-            <li class="list-group-item">Vite: современный сборщик</li>
-            <li class="list-group-item">Основы семантической вёрстки</li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <span>Как работает Bootstrap 6</span>
+              <span class="badge bg-2 fg-1">популярное</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <span>Vite: современный сборщик</span>
+              <span class="badge bg-2 fg-1">новое</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <span>Основы семантической вёрстки</span>
+              <span class="badge bg-2 fg-1">базовое</span>
+            </li>
+            <li class="list-group-item">Настройка доступности (a11y) в веб-проектах</li>
+            <li class="list-group-item">Компонентный подход с Bootstrap 6</li>
+            <li class="list-group-item">Оптимизация сборки для production</li>
           </ul>
+        </section>
+
+        <section class="card mb-3" id="wiki-intro">
+          <div class="card-body">
+            <h2 class="fs-xl">Что такое wiki и зачем она нужна?</h2>
+            <p>Wiki (гав. «быстро») — это веб-сайт, который пользователи могут <strong>сами редактировать</strong> прямо через браузер. Идея принадлежит Уорду Каннингему, запустившему первый вики-движок WikiWikiWeb в 1995 году.</p>
+            <p>Сегодня wiki — стандарт для:</p>
+            <ul>
+              <li><strong>корпоративной документации</strong> (Confluence, Notion, внутренние базы знаний);</li>
+              <li><strong>сообществ</strong> (Wikipedia, Fandom, ArchWiki);</li>
+              <li><strong>образовательных платформ</strong> (учебники, методички, справочники);</li>
+              <li><strong>персональных заметок</strong> (Obsidian, Logseq, TiddlyWiki).</li>
+            </ul>
+            <p class="mb-0">Главное преимущество — <strong>низкий порог входа</strong>: любой участник может дополнить или исправить страницу без специальных знаний.</p>
+          </div>
+        </section>
+
+        <section class="card mb-3" id="editing">
+          <div class="card-body">
+            <h2 class="fs-xl">Редактирование и форматирование</h2>
+            <p>Страницы wiki обычно пишут на упрощённом языке разметки — <strong>Markdown</strong> или <strong>WikiText</strong>. Это позволяет автору сосредоточиться на содержании, а не на HTML-тегах.</p>
+            <p class="fw-semibold">Основные возможности редактора:</p>
+            <ul>
+              <li>заголовки нескольких уровней (<code>#</code>, <code>##</code>, <code>###</code>);</li>
+              <li>списки — маркированные и нумерованные;</li>
+              <li>внутренние ссылки на другие страницы wiki;</li>
+              <li>вставка изображений, таблиц и кода;</li>
+              <li>предпросмотр перед сохранением.</li>
+            </ul>
+            <p class="mb-0">Большинство wiki-движков хранят историю изменений (<strong>diff</strong>), позволяя откатить правку или посмотреть, кто и когда менял страницу.</p>
+          </div>
+        </section>
+
+        <section class="card mb-3" id="sources">
+          <div class="card-body">
+            <h2 class="fs-xl">Источники и ссылки</h2>
+            <p>Достоверность информации в wiki напрямую зависит от качества источников. Рекомендуется:</p>
+            <ul>
+              <li>ссылаться на <strong>первичные источники</strong> — официальную документацию, стандарты, научные статьи;</li>
+              <li>указывать дату обращения к источнику (особенно для веб-страниц);</li>
+              <li>избегать ссылок на блоги и форумы без дополнительной верификации;</li>
+              <li>использовать <strong>архивные копии</strong> (Wayback Machine) для нестабильных URL.</li>
+            </ul>
+            <p class="fw-semibold mt-3">Ресурсы для wiki-авторов:</p>
+            <ul>
+              <li><a href="https://getbootstrap.com/docs/6.0/">Bootstrap 6 Documentation</a> — компоненты и утилиты;</li>
+              <li><a href="https://www.markdownguide.org/">Markdown Guide</a> — справочник по разметке;</li>
+              <li><a href="https://developer.mozilla.org/ru/">MDN Web Docs</a> — веб-стандарты и API;</li>
+              <li><a href="https://www.w3.org/WAI/">Web Accessibility Initiative (WAI)</a> — руководства по доступности.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="card mb-3" id="faq">
+          <div class="card-body">
+            <h2 class="fs-xl">Часто задаваемые вопросы (FAQ)</h2>
+            <dl>
+              <dt class="fw-semibold mt-2">Это готовый wiki-движок?</dt>
+              <dd>SmileWiki — HTML-шаблон интерфейса. Хранение статей, совместное редактирование и права доступа нужно реализовать отдельно.</dd>
+              <dt class="fw-semibold mt-2">Как добавить новую страницу?</dt>
+              <dd>Создайте HTML-файл в папке <code>smilewikihtml/</code>, подключите <code>main.js</code> и добавьте ссылку в навигацию. Для статей — используйте карточки или list-group.</dd>
+              <dt class="fw-semibold mt-2">Поддерживает ли шаблон тёмную тему?</dt>
+              <dd>Да. Bootstrap 6 поддерживает data-bs-theme. Переключение реализовано через меню в верхней панели — тема сохраняется в localStorage.</dd>
+              <dt class="fw-semibold mt-2">Нужен ли серверный бэкенд?</dt>
+              <dd>Нет. SmileWiki — полностью статический шаблон. Для расширенной функциональности (поиск по всем страницам, авторизация) потребуется бэкенд.</dd>
+              <dt class="fw-semibold mt-2">Можно ли подключить Markdown-файлы?</dt>
+              <dd>В текущей версии — нет. Однако при сборке через Vite можно подключить плагин для Markdown и рендерить <code>.md</code> напрямую.</dd>
+            </dl>
+          </div>
+        </section>
+
+        <section class="card mb-3" id="community">
+          <div class="card-body">
+            <h2 class="fs-xl">Сообщество и поддержка</h2>
+            <p>SmileWiki — живой проект, и мы рады любой обратной связи.</p>
+            <ul>
+              <li><strong>Баг-репорты и предложения</strong> — оставляйте в Issues на GitHub;</li>
+              <li><strong>Pull Requests</strong> — приветствуются: форкните репозиторий, создайте ветку и отправьте PR;</li>
+              <li><strong>Вопросы</strong> — описывайте с примерами: ожидаемое поведение, фактический результат и шаги воспроизведения;</li>
+              <li><strong>Документация</strong> — <code>README.md</code> в корне проекта содержит инструкции по сборке и настройке.</li>
+            </ul>
+            <p class="mb-0">Вместе мы сделаем SmileWiki удобным инструментом для всех.</p>
+          </div>
         </section>
       </div>
       <aside class="d-none lg:d-block lg:col-2" aria-label="Оглавление страницы">
@@ -125,7 +233,12 @@
           <h2 class="fs-md fw-semibold">На этой странице</h2>
           <a class="nav-link justify-content-start" href="#about">О проекте</a>
           <a class="nav-link justify-content-start" href="#start">Быстрый старт</a>
-          <a class="nav-link justify-content-start" href="#articles">Примеры разделов</a>
+          <a class="nav-link justify-content-start" href="#articles">Категории статей</a>
+          <a class="nav-link justify-content-start" href="#wiki-intro">Что такое wiki</a>
+          <a class="nav-link justify-content-start" href="#editing">Редактирование</a>
+          <a class="nav-link justify-content-start" href="#sources">Источники</a>
+          <a class="nav-link justify-content-start" href="#faq">FAQ</a>
+          <a class="nav-link justify-content-start" href="#community">Сообщество</a>
         </nav>
       </aside>
     </div>
@@ -160,7 +273,12 @@
       <nav class="nav flex-column" aria-label="Оглавление">
         <a class="nav-link justify-content-start" href="#about">О проекте</a>
         <a class="nav-link justify-content-start" href="#start">Быстрый старт</a>
-        <a class="nav-link justify-content-start" href="#articles">Примеры разделов</a>
+        <a class="nav-link justify-content-start" href="#articles">Категории статей</a>
+        <a class="nav-link justify-content-start" href="#wiki-intro">Что такое wiki</a>
+        <a class="nav-link justify-content-start" href="#editing">Редактирование</a>
+        <a class="nav-link justify-content-start" href="#sources">Источники</a>
+        <a class="nav-link justify-content-start" href="#faq">FAQ</a>
+        <a class="nav-link justify-content-start" href="#community">Сообщество</a>
       </nav>
     </div>
   </dialog>
