@@ -79,6 +79,31 @@ document.querySelectorAll('[data-site-navigation]').forEach((nav) => {
   nav.replaceChildren(renderNavigation(navigationPages));
 });
 
+// Keep each desktop menu inside the visible viewport, including above the fold.
+const desktopMenus = [...document.querySelectorAll('aside > nav.sticky-top')];
+function fitDesktopMenus() {
+  const viewport = window.visualViewport;
+  const bottom = viewport ? viewport.offsetTop + viewport.height : window.innerHeight;
+  const heights = desktopMenus.map((menu) => Math.max(0, bottom - Math.max(0, menu.getBoundingClientRect().top)));
+  desktopMenus.forEach((menu, index) => {
+    menu.style.maxHeight = `${heights[index]}px`;
+  });
+}
+let menuResizeFrame;
+function scheduleMenuResize() {
+  if (menuResizeFrame) return;
+  menuResizeFrame = requestAnimationFrame(() => {
+    menuResizeFrame = undefined;
+    fitDesktopMenus();
+  });
+}
+window.addEventListener('scroll', scheduleMenuResize, { passive: true });
+window.addEventListener('resize', scheduleMenuResize);
+window.visualViewport?.addEventListener('resize', scheduleMenuResize);
+window.visualViewport?.addEventListener('scroll', scheduleMenuResize);
+new ResizeObserver(scheduleMenuResize).observe(document.querySelector('body'));
+fitDesktopMenus();
+
 // Build both versions of the contents from article headings in document order.
 const pageContent = document.querySelector('#pageContent');
 const headings = [...pageContent.querySelectorAll('h2, h3')];
