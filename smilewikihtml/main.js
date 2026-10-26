@@ -56,17 +56,17 @@ document.querySelector('#userMenu').addEventListener('click', (event) => {
 
 function renderNavigation(pages, depth = 1) {
   const list = document.createElement('ul');
-  list.className = 'list-unstyled mb-0';
+  list.className = 'nav d-block list-unstyled mb-0';
   list.dataset.depth = depth;
   if (depth > 1) list.classList.add('border-start', 'ms-1', 'ps-1');
   pages.forEach((page) => {
     const item = document.createElement('li');
     const link = document.createElement('a');
-    link.className = 'nav-link d-block border-0 rounded-0 py-1 px-1 lh-sm fs-sm text-wrap text-break';
+    link.className = 'nav-link d-block border-0 rounded-0 py-1 px-2 lh-sm fs-sm text-wrap text-break';
     link.textContent = page.title;
     link.href = page.href;
     if (new URL(page.href, location.origin).pathname === location.pathname.replace(/index\.html$/, '')) {
-      link.classList.add('active', 'fw-semibold');
+      link.classList.add('active');
       link.setAttribute('aria-current', 'page');
     }
     item.append(link);
@@ -79,6 +79,16 @@ document.querySelectorAll('[data-site-navigation]').forEach((nav) => {
   nav.replaceChildren(renderNavigation(navigationPages));
 });
 
+// Scroll only the menu, leaving the article position and keyboard focus intact.
+function centerActiveLink(menu) {
+  const active = menu.querySelector('.nav-link.active');
+  if (!active || !menu.clientHeight) return;
+  const menuRect = menu.getBoundingClientRect();
+  const linkRect = active.getBoundingClientRect();
+  menu.scrollTop += linkRect.top + linkRect.height / 2
+    - menuRect.top - menu.clientTop - menu.clientHeight / 2;
+}
+
 // Keep each desktop menu inside the visible viewport, including above the fold.
 const desktopMenus = [...document.querySelectorAll('aside > nav.sticky-top')];
 function fitDesktopMenus() {
@@ -87,6 +97,7 @@ function fitDesktopMenus() {
   const heights = desktopMenus.map((menu) => Math.max(0, bottom - Math.max(0, menu.getBoundingClientRect().top)));
   desktopMenus.forEach((menu, index) => {
     menu.style.maxHeight = `${heights[index]}px`;
+    centerActiveLink(menu);
   });
 }
 let menuResizeFrame;
@@ -183,4 +194,21 @@ function followSectionLink(event) {
 }
 for (const id of ['searchDialog', 'sidebarDrawer', 'tocDrawer']) {
   document.getElementById(id).addEventListener('click', followSectionLink);
+}
+
+// ScrollSpy changes the active section as the article scrolls.
+const pageNav = document.querySelector('#pageNav');
+new MutationObserver(scheduleMenuResize).observe(pageNav, {
+  subtree: true, attributes: true, attributeFilter: ['class'],
+});
+for (const id of ['sidebarDrawer', 'tocDrawer']) {
+  document.getElementById(id).addEventListener('shown.bs.drawer', (event) => {
+    if (id === 'tocDrawer') {
+      const activeHref = pageNav.querySelector('.nav-link.active')?.getAttribute('href');
+      event.currentTarget.querySelectorAll('.nav-link').forEach((link) => {
+        link.classList.toggle('active', link.getAttribute('href') === activeHref);
+      });
+    }
+    centerActiveLink(event.currentTarget.querySelector('.drawer-body'));
+  });
 }
