@@ -81,7 +81,7 @@ const searchable = [...document.querySelectorAll('#main-content section[id]')].m
   title: (element.querySelector('h2')?.textContent ?? element.textContent).trim(),
   text: element.textContent,
 }));
-document.querySelectorAll('#articles .list-group > li').forEach((element, index) => {
+document.querySelectorAll('#articles > ul > li').forEach((element, index) => {
   element.id = `article-${index + 1}`;
   searchable.push({ id: element.id, title: element.textContent, text: element.textContent });
 });
@@ -95,7 +95,6 @@ function search() {
   document.querySelector('#searchSummary').textContent = matches.length ? `Найдено: ${matches.length}` : 'Ничего не найдено. Попробуйте другой запрос.';
   matches.forEach((item) => {
     const li = document.createElement('li');
-    li.className = 'list-group-item';
     const link = document.createElement('a');
     link.href = `#${item.id}`;
     link.textContent = item.title;
@@ -117,9 +116,6 @@ function followSectionLink(event) {
   const overlay = event.currentTarget;
   event.preventDefault();
   const navigate = () => {
-    if ((target.id === 'start' || target.closest('#quickStart')) && !document.querySelector('#quickStart').classList.contains('show')) {
-      document.querySelector('[data-bs-target="#quickStart"]').click();
-    }
     history.replaceState(null, '', link.hash);
     target.scrollIntoView();
     target.setAttribute('tabindex', '-1');
