@@ -8,32 +8,52 @@
   <script type="module" crossorigin src="/smilewikihtml/assets/index-3IgD0rgh.js"></script>
   <link rel="stylesheet" crossorigin href="/smilewikihtml/assets/index-CmdJYvuw.css">
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
+  <!-- Topbar -->
   <nav class="navbar lg:navbar-expand bg-1" data-bs-theme="dark">
     <div class="container">
       <a class="navbar-brand" href="/smilewikihtml/">SmileWiki</a>
-      <button class="btn-icon navbar-toggler" type="button" data-bs-toggle="drawer" data-bs-target="#navbarDrawer" aria-controls="navbarDrawer" aria-expanded="false" aria-label="Переключить навигацию">
+      <button class="btn-icon navbar-toggler lg:d-none" type="button" data-bs-toggle="drawer" data-bs-target="#sidebarDrawer" aria-controls="sidebarDrawer" aria-expanded="false" aria-label="Открыть навигацию">
         <span class="navbar-toggler-icon" aria-hidden="true"></span>
       </button>
-      <dialog class="drawer drawer-end" tabindex="-1" id="navbarDrawer" aria-labelledby="navbarDrawerLabel">
+    </div>
+  </nav>
+
+  <!-- .container > .row с левой навигацией + контентом -->
+  <main class="container py-4 flex-grow-1" id="main-content">
+    <div class="row g-4">
+
+      <!-- Left sidebar navigation — mobile: drawer, lg: колонка -->
+      <dialog class="drawer drawer-start" tabindex="-1" id="sidebarDrawer" aria-labelledby="sidebarDrawerLabel">
         <div class="drawer-header">
-          <h5 class="drawer-title" id="navbarDrawerLabel">Меню</h5>
+          <h5 class="drawer-title" id="sidebarDrawerLabel">Разделы</h5>
           <button type="button" class="btn-close" data-bs-dismiss="drawer" aria-label="Закрыть"></button>
         </div>
-        <div class="drawer-body mb-2 md:mb-0">
-          <ul class="nav navbar-nav me-auto">
+        <div class="drawer-body">
+          <ul class="nav flex-column nav-pills">
             <li class="nav-item"><a class="nav-link active" aria-current="page" href="/smilewikihtml/">Главная</a></li>
             <li class="nav-item"><a class="nav-link" href="#articles">Категории</a></li>
             <li class="nav-item"><a class="nav-link" href="#about">О проекте</a></li>
           </ul>
         </div>
       </dialog>
-    </div>
-  </nav>
 
-  <div class="container mt-4">
-    <div class="row g-4">
-      <div class="md:col-8">
+      <!-- Desktop sidebar -->
+      <aside class="d-none lg:d-block lg:col-3" aria-label="Навигация по разделам">
+        <div class="card">
+          <div class="card-header">Разделы</div>
+          <div class="card-body py-2">
+            <ul class="nav flex-column nav-pills">
+              <li class="nav-item"><a class="nav-link active" aria-current="page" href="/smilewikihtml/">Главная</a></li>
+              <li class="nav-item"><a class="nav-link" href="#articles">Категории</a></li>
+              <li class="nav-item"><a class="nav-link" href="#about">О проекте</a></li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main content area -->
+      <div class="lg:col-9">
         <h1 class="fs-3xl fw-bold">Добро пожаловать в SmileWiki</h1>
         <p class="fs-lg fw-light">HTML-шаблон для wiki-проектов.</p>
 
@@ -54,9 +74,7 @@
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="md:col-4">
         <div class="card">
           <div class="card-header" id="articles">Примеры разделов</div>
           <ul class="list-group list-group-flush">
@@ -66,7 +84,16 @@
           </ul>
         </div>
       </div>
+
     </div>
-  </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-1 border-top py-3 mt-auto">
+    <div class="container d-flex flex-wrap justify-content-between align-items-center">
+      <span class="fs-sm">&copy; 2026 SmileWiki</span>
+      <span class="fs-sm">Bootstrap 6 &middot; Vite</span>
+    </div>
+  </footer>
 </body>
 </html>
