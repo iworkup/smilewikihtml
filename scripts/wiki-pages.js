@@ -65,6 +65,39 @@ function injectNavigationAndToc(html, currentPath) {
 
 // ── Page content replacement for article pages ──────────────────────────────
 
+async function renderCodeCard(preview, code, label) {
+  const highlighted = await codeToHtml(code, {
+    lang: 'html',
+    theme: 'material-theme-palenight',
+    transformers: [{ pre(node) {
+      node.properties.class += ' m-0 p-3 overflow-auto';
+      node.properties.tabindex = 0;
+      node.properties['aria-label'] = `HTML-код: ${label}`;
+    } }],
+  });
+  return `<div class="card overflow-hidden" data-code-block>
+    <div class="card-body">${preview}</div>
+    <div class="d-flex align-items-center justify-content-between gap-2 p-2 bg-2 border-top border-bottom">
+      <span class="font-monospace fs-sm">HTML</span>
+              <button type="button" class="btn btn-sm btn-icon btn-outline theme-secondary" data-copy-code aria-label="Скопировать HTML-код: ${escape(label)}" title="Копировать код"><svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 1.5v1H6v-1A.5.5 0 0 1 6.5 1h3a.5.5 0 0 1 .5.5m-5 0A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5h1A2 2 0 0 1 14 3.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V3.5a2 2 0 0 1 2-2zm0 1H4a1 1 0 0 0-1 1V14a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V3.5a1 1 0 0 0-1-1h-1v1H5z"/></svg></button>
+    </div>
+    ${highlighted}
+    <div class="px-2 fs-sm" role="status" aria-live="polite" data-copy-status></div>
+  </div>`;
+}
+
+const inlineTextExample = `<p>Это обычный параграф текста.</p>
+<p>Это следующий параграф — отдельная мысль.</p>
+<p>Первая строка параграфа.<br>Вторая строка после принудительного переноса.</p>
+<p>Можно <mark>выделить</mark> важный фрагмент текста.</p>
+<p><del>Этот фрагмент удалён из документа.</del></p>
+<p><s>Эти сведения больше не актуальны.</s></p>
+<p><ins>Этот фрагмент добавлен в документ.</ins></p>
+<p><u>Это слово с подчёркнутой аннотацией.</u></p>
+<p><small>Это примечание мелким шрифтом.</small></p>
+<p><strong>Это важный текст, выделенный полужирным.</strong></p>
+<p><em>Это текст с логическим ударением, выделенный курсивом.</em></p>`;
+
 async function renderArticleContent(template, page) {
   const title = escape(page.title);
   const pageActions = template.match(/<div\b[^>]*id="pageActions"[^>]*>[\s\S]*?<\/div>/)?.[0];
@@ -74,23 +107,17 @@ async function renderArticleContent(template, page) {
         <section class="mb-3" id="headings">
           <h2>Заголовки</h2>
           <p>Шесть уровней заголовков: от h1 до h6. HTML-код всех примеров приведён ниже.</p>
-          <div class="card overflow-hidden" data-code-block>
-            <div class="card-body">
-          ${[1, 2, 3, 4, 5, 6].map((level) => {
-            return `<h${level} data-typography-example>Заголовок ${level}-го уровня</h${level}>`;
-          }).join('\n          ')}
-            </div>
-            <div class="d-flex align-items-center justify-content-between gap-2 p-2 bg-2 border-top border-bottom">
-              <span class="font-monospace fs-sm">HTML</span>
-              <button type="button" class="btn btn-sm btn-icon btn-outline theme-secondary" data-copy-code aria-label="Скопировать HTML-код заголовков" title="Копировать код"><svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 1.5v1H6v-1A.5.5 0 0 1 6.5 1h3a.5.5 0 0 1 .5.5m-5 0A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5h1A2 2 0 0 1 14 3.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V3.5a2 2 0 0 1 2-2zm0 1H4a1 1 0 0 0-1 1V14a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V3.5a1 1 0 0 0-1-1h-1v1H5z"/></svg></button>
-            </div>
-            ${await codeToHtml([1, 2, 3, 4, 5, 6].map((level) => `<h${level}>Заголовок ${level}-го уровня</h${level}>`).join('\n'), {
-              lang: 'html',
-              theme: 'material-theme-palenight',
-              transformers: [{ pre(node) { node.properties.class += ' m-0 p-3 overflow-auto'; node.properties.tabindex = 0; node.properties['aria-label'] = 'HTML-код заголовков'; } }],
-            })}
-            <div class="px-2 fs-sm" role="status" aria-live="polite" data-copy-status></div>
-          </div>
+          ${await renderCodeCard(
+            [1, 2, 3, 4, 5, 6].map((level) => `<h${level} data-typography-example>Заголовок ${level}-го уровня</h${level}>`).join('\n'),
+            [1, 2, 3, 4, 5, 6].map((level) => `<h${level}>Заголовок ${level}-го уровня</h${level}>`).join('\n'),
+            'Заголовки',
+          )}
+        </section>
+        <section class="mb-3" id="inline-text-elements">
+          <h2>Стандартное оформление текста</h2>
+          <p>Параграфы, перенос строки и стандартные HTML-элементы оформления текста.</p>
+          ${await renderCodeCard(inlineTextExample, inlineTextExample, 'Стандартное оформление текста')}
+          <p class="mt-3">Тег <code>&lt;p&gt;</code> создаёт отдельный параграф, а <code>&lt;br&gt;</code> переносит строку внутри него. Используйте смысловые теги по назначению: <code>&lt;del&gt;</code> и <code>&lt;ins&gt;</code> отмечают изменения, <code>&lt;strong&gt;</code> — важность, <code>&lt;em&gt;</code> — логическое ударение.</p>
         </section>`
     : `<section class="mb-3" id="overview">
           <h2 class="fs-xl">Об этой странице</h2>
