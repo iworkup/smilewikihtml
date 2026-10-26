@@ -254,7 +254,17 @@
           <h3 id="маркированный-список">Маркированный список</h3>
           <div class="card overflow-hidden" data-code-block>
     <div class="card-body"><ul>
-  <li>Первый пункт списка</li>
+  <li>Первый пункт списка
+    <ul>
+      <li>Вложенный пункт
+        <ul>
+          <li>Пункт третьего уровня</li>
+          <li>Ещё один пункт третьего уровня</li>
+        </ul>
+      </li>
+      <li>Ещё один вложенный пункт</li>
+    </ul>
+  </li>
   <li>Второй пункт списка</li>
   <li>Третий пункт списка</li>
 </ul></div>
@@ -263,7 +273,17 @@
               <button type="button" class="btn btn-sm btn-icon btn-outline theme-secondary" data-copy-code aria-label="Скопировать HTML-код: Маркированный список" title="Копировать код"><svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 1.5v1H6v-1A.5.5 0 0 1 6.5 1h3a.5.5 0 0 1 .5.5m-5 0A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5h1A2 2 0 0 1 14 3.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V3.5a2 2 0 0 1 2-2zm0 1H4a1 1 0 0 0-1 1V14a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V3.5a1 1 0 0 0-1-1h-1v1H5z"/></svg></button>
     </div>
     <pre class="shiki material-theme-palenight m-0 p-3 overflow-auto" style="background-color:#292D3E;color:#babed8" tabindex="0" aria-label="HTML-код: Маркированный список"><code><span class="line"><span style="color:#89DDFF">&#x3C;</span><span style="color:#F07178">ul</span><span style="color:#89DDFF">></span></span>
-<span class="line"><span style="color:#89DDFF">  &#x3C;</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span><span style="color:#BABED8">Первый пункт списка</span><span style="color:#89DDFF">&#x3C;/</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span></span>
+<span class="line"><span style="color:#89DDFF">  &#x3C;</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span><span style="color:#BABED8">Первый пункт списка</span></span>
+<span class="line"><span style="color:#89DDFF">    &#x3C;</span><span style="color:#F07178">ul</span><span style="color:#89DDFF">></span></span>
+<span class="line"><span style="color:#89DDFF">      &#x3C;</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span><span style="color:#BABED8">Вложенный пункт</span></span>
+<span class="line"><span style="color:#89DDFF">        &#x3C;</span><span style="color:#F07178">ul</span><span style="color:#89DDFF">></span></span>
+<span class="line"><span style="color:#89DDFF">          &#x3C;</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span><span style="color:#BABED8">Пункт третьего уровня</span><span style="color:#89DDFF">&#x3C;/</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span></span>
+<span class="line"><span style="color:#89DDFF">          &#x3C;</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span><span style="color:#BABED8">Ещё один пункт третьего уровня</span><span style="color:#89DDFF">&#x3C;/</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span></span>
+<span class="line"><span style="color:#89DDFF">        &#x3C;/</span><span style="color:#F07178">ul</span><span style="color:#89DDFF">></span></span>
+<span class="line"><span style="color:#89DDFF">      &#x3C;/</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span></span>
+<span class="line"><span style="color:#89DDFF">      &#x3C;</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span><span style="color:#BABED8">Ещё один вложенный пункт</span><span style="color:#89DDFF">&#x3C;/</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span></span>
+<span class="line"><span style="color:#89DDFF">    &#x3C;/</span><span style="color:#F07178">ul</span><span style="color:#89DDFF">></span></span>
+<span class="line"><span style="color:#89DDFF">  &#x3C;/</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span></span>
 <span class="line"><span style="color:#89DDFF">  &#x3C;</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span><span style="color:#BABED8">Второй пункт списка</span><span style="color:#89DDFF">&#x3C;/</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span></span>
 <span class="line"><span style="color:#89DDFF">  &#x3C;</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span><span style="color:#BABED8">Третий пункт списка</span><span style="color:#89DDFF">&#x3C;/</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span></span>
 <span class="line"><span style="color:#89DDFF">&#x3C;/</span><span style="color:#F07178">ul</span><span style="color:#89DDFF">></span></span></code></pre>
@@ -272,7 +292,17 @@
           <h3 class="mt-4" id="нумерованный-список">Нумерованный список</h3>
           <div class="card overflow-hidden" data-code-block>
     <div class="card-body"><ol>
-  <li>Откройте нужную страницу.</li>
+  <li>Откройте нужную страницу.
+    <ol>
+      <li>Найдите раздел.
+        <ol>
+          <li>Раскройте меню раздела.</li>
+          <li>Выберите страницу.</li>
+        </ol>
+      </li>
+      <li>Откройте редактор.</li>
+    </ol>
+  </li>
   <li>Внесите изменения в текст.</li>
   <li>Сохраните результат.</li>
 </ol></div>
@@ -281,7 +311,17 @@
               <button type="button" class="btn btn-sm btn-icon btn-outline theme-secondary" data-copy-code aria-label="Скопировать HTML-код: Нумерованный список" title="Копировать код"><svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 1.5v1H6v-1A.5.5 0 0 1 6.5 1h3a.5.5 0 0 1 .5.5m-5 0A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5h1A2 2 0 0 1 14 3.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V3.5a2 2 0 0 1 2-2zm0 1H4a1 1 0 0 0-1 1V14a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V3.5a1 1 0 0 0-1-1h-1v1H5z"/></svg></button>
     </div>
     <pre class="shiki material-theme-palenight m-0 p-3 overflow-auto" style="background-color:#292D3E;color:#babed8" tabindex="0" aria-label="HTML-код: Нумерованный список"><code><span class="line"><span style="color:#89DDFF">&#x3C;</span><span style="color:#F07178">ol</span><span style="color:#89DDFF">></span></span>
-<span class="line"><span style="color:#89DDFF">  &#x3C;</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span><span style="color:#BABED8">Откройте нужную страницу.</span><span style="color:#89DDFF">&#x3C;/</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span></span>
+<span class="line"><span style="color:#89DDFF">  &#x3C;</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span><span style="color:#BABED8">Откройте нужную страницу.</span></span>
+<span class="line"><span style="color:#89DDFF">    &#x3C;</span><span style="color:#F07178">ol</span><span style="color:#89DDFF">></span></span>
+<span class="line"><span style="color:#89DDFF">      &#x3C;</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span><span style="color:#BABED8">Найдите раздел.</span></span>
+<span class="line"><span style="color:#89DDFF">        &#x3C;</span><span style="color:#F07178">ol</span><span style="color:#89DDFF">></span></span>
+<span class="line"><span style="color:#89DDFF">          &#x3C;</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span><span style="color:#BABED8">Раскройте меню раздела.</span><span style="color:#89DDFF">&#x3C;/</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span></span>
+<span class="line"><span style="color:#89DDFF">          &#x3C;</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span><span style="color:#BABED8">Выберите страницу.</span><span style="color:#89DDFF">&#x3C;/</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span></span>
+<span class="line"><span style="color:#89DDFF">        &#x3C;/</span><span style="color:#F07178">ol</span><span style="color:#89DDFF">></span></span>
+<span class="line"><span style="color:#89DDFF">      &#x3C;/</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span></span>
+<span class="line"><span style="color:#89DDFF">      &#x3C;</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span><span style="color:#BABED8">Откройте редактор.</span><span style="color:#89DDFF">&#x3C;/</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span></span>
+<span class="line"><span style="color:#89DDFF">    &#x3C;/</span><span style="color:#F07178">ol</span><span style="color:#89DDFF">></span></span>
+<span class="line"><span style="color:#89DDFF">  &#x3C;/</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span></span>
 <span class="line"><span style="color:#89DDFF">  &#x3C;</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span><span style="color:#BABED8">Внесите изменения в текст.</span><span style="color:#89DDFF">&#x3C;/</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span></span>
 <span class="line"><span style="color:#89DDFF">  &#x3C;</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span><span style="color:#BABED8">Сохраните результат.</span><span style="color:#89DDFF">&#x3C;/</span><span style="color:#F07178">li</span><span style="color:#89DDFF">></span></span>
 <span class="line"><span style="color:#89DDFF">&#x3C;/</span><span style="color:#F07178">ol</span><span style="color:#89DDFF">></span></span></code></pre>
