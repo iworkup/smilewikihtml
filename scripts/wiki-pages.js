@@ -1,6 +1,5 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { restoreNavigation } from './navigation-state.js';
 import { navigationPages } from '../smilewikihtml/navigation.js';
 
 const allPages = navigationPages.flatMap(function flatten(page) {
@@ -16,7 +15,7 @@ function buildNavigationHtml(pages, currentPath, navIndex, path = []) {
     const childPath = [...path, index].join('-');
     const branchClass = `navigation-branch-${childPath}`;
     const id = `navigation-${navIndex}-${childPath}`;
-    const toggle = page.children?.length ? `<button type="button" class="btn-icon btn-xs border-0 rounded-0 py-1 px-1 lh-sm fs-sm flex-shrink-0" data-bs-toggle="collapse" data-bs-target=".${branchClass}" aria-controls="${id}" data-navigation-toggle="${escape(page.href)}" aria-expanded="${open}" aria-label="${open ? 'Свернуть' : 'Развернуть'} «${escape(page.title)}»">${open ? '−' : '+'}</button>` : '';
+    const toggle = page.children?.length ? `<button type="button" class="btn-icon btn-text btn-xs border-0 rounded-0 py-1 px-1 lh-sm fs-sm flex-shrink-0" data-bs-toggle="collapse" data-bs-target=".${branchClass}" aria-controls="${id}" data-navigation-toggle="${escape(page.href)}" aria-expanded="${open}" aria-label="${open ? 'Свернуть' : 'Развернуть'} «${escape(page.title)}»">${open ? '−' : '+'}</button>` : '';
     const children = page.children?.length ? `<div id="${id}" class="collapse transition-none ${branchClass}${open ? ' show' : ''}" data-navigation-href="${escape(page.href)}">${buildNavigationHtml(page.children, currentPath, navIndex, [...path, index])}</div>` : '';
     return `<li><div class="d-flex align-items-start"><a class="nav-link d-block border-0 rounded-0 py-1 px-2 lh-sm fs-sm text-wrap text-break flex-grow-1 min-w-0${isActive ? ' active' : ''}"${isActive ? ' aria-current="page"' : ''} href="${escape(page.href)}">${escape(page.title)}</a>${toggle}</div>${children}</li>`;
   }).join('')}</ul>`;
@@ -48,7 +47,7 @@ function injectNavigationAndToc(html, currentPath) {
     return start + content + end;
   });
   let navIndex = 0;
-  html = html.replace(/(<(nav|div)\b[^>]*data-site-navigation[^>]*>)\s*<\/\2>/g, (_, start, tag) => `${start}<!-- generated:navigation:start -->${buildNavigationHtml(navigationPages, currentPath, navIndex++)}<script>(${restoreNavigation.toString()})();</script><!-- generated:navigation:end --></${tag}>`);
+  html = html.replace(/(<(nav|div)\b[^>]*data-site-navigation[^>]*>)\s*<\/\2>/g, (_, start, tag) => `${start}<!-- generated:navigation:start -->${buildNavigationHtml(navigationPages, currentPath, navIndex++)}<!-- generated:navigation:end --></${tag}>`);
   const toc = headings.map(({ tag, id, text }) => `<a class="nav-link justify-content-start py-1 px-2 lh-sm fs-sm text-wrap rounded-0 ${tag === 'h3' ? 'ms-3 border-start border-2 border-top-0 border-end-0 border-bottom-0' : 'border-0'}" href="#${encodeURIComponent(id)}">${text}</a>`).join('');
   return html.replace(/(<(nav|div)\b[^>]*data-page-toc[^>]*>)\s*<\/\2>/g, (_, start, tag) => `${start}<!-- generated:toc:start -->${toc}<!-- generated:toc:end --></${tag}>`);
 }
