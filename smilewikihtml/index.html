@@ -16,7 +16,7 @@
 </head>
 <body class="d-flex flex-column min-vh-100" data-bs-spy="scroll" data-bs-target="#pageNav">
   <!-- Topbar -->
-  <nav class="navbar navbar-translucent lg:navbar-expand sticky-top z-fixed" aria-label="Верхняя панель">
+  <nav class="navbar navbar-translucent 2xl:navbar-expand sticky-top z-fixed" aria-label="Верхняя панель">
     <div class="container gap-2">
       <a class="navbar-brand" href="/smilewikihtml/">Smile Wiki HTML</a>
       <div class="d-flex align-items-center gap-2 ms-auto">
@@ -48,7 +48,7 @@
           </div>
         </div>
       </div>
-      <button class="btn-icon navbar-toggler lg:d-none" type="button" data-bs-toggle="drawer" data-bs-target="#sidebarDrawer" aria-controls="sidebarDrawer" aria-expanded="false" aria-label="Открыть навигацию">
+      <button class="btn-icon navbar-toggler 2xl:d-none" type="button" data-bs-toggle="drawer" data-bs-target="#sidebarDrawer" aria-controls="sidebarDrawer" aria-expanded="false" aria-label="Открыть навигацию">
         <span class="navbar-toggler-icon" aria-hidden="true"></span>
       </button>
     </div>
@@ -59,7 +59,7 @@
     <p id="topbarStatus" class="d-none alert theme-info" role="status"></p>
     <div class="row g-4">
 
-      <!-- Left sidebar navigation — mobile: drawer, lg: колонка -->
+      <!-- Left sidebar navigation — ниже 2xl: drawer, от 2xl: колонка -->
       <dialog class="drawer drawer-start" tabindex="-1" id="sidebarDrawer" aria-label="Разделы сайта">
         <div class="drawer-header justify-content-end">
           <button type="button" class="btn-close" data-bs-dismiss="drawer" aria-label="Закрыть"></button>
@@ -70,14 +70,14 @@
       </dialog>
 
       <!-- Desktop sidebar -->
-      <aside class="d-none lg:d-block lg:col-2" aria-label="Навигация по разделам">
+      <aside class="d-none 2xl:d-block 2xl:col-2" aria-label="Навигация по разделам">
         <nav data-desktop-menu class="position-fixed overflow-y-auto py-3" aria-label="Разделы сайта">
           <div data-site-navigation></div>
         </nav>
       </aside>
 
       <!-- Main content area -->
-      <div class="col-12 lg:col-8" id="pageContent">
+      <div class="col-12 lg:col-10 2xl:col-8" id="pageContent">
         <button class="btn-outline theme-secondary lg:d-none mb-3" type="button" data-bs-toggle="drawer" data-bs-target="#tocDrawer" aria-controls="tocDrawer">На этой странице</button>
         <h1 class="fs-3xl fw-bold">Smile Wiki HTML</h1>
         <p class="fs-lg fw-light">HTML-шаблон для wiki-проектов.</p>
