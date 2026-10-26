@@ -1,1 +1,18 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
+
+/* Approved customization: hierarchical numbering without list indentation. */
+@layer custom {
+  #pageContent ol {
+    list-style: none;
+    padding-inline-start: 0;
+    counter-reset: ordered-item;
+  }
+
+  #pageContent ol > li {
+    counter-increment: ordered-item;
+  }
+
+  #pageContent ol > li::before {
+    content: counters(ordered-item, ".") ". ";
+  }
+}
