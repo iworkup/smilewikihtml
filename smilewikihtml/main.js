@@ -1,6 +1,4 @@
-import { navigationPages } from './navigation.js';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Collapse } from 'bootstrap';
+import 'bootstrap';
 const themeLabels = { light: 'светлая', dark: 'тёмная', auto: 'системная' };
 let selectedTheme = 'auto';
 try { selectedTheme = localStorage.getItem('smilewiki-theme') || 'auto'; } catch {}
@@ -52,72 +50,14 @@ document.querySelector('#userMenu').addEventListener('click', (event) => {
   }
 });
 
-// Shared hierarchy: open ancestors and the current page's immediate children.
-const currentPath = location.pathname.replace(/index\.html$/, '');
-const initiallyOpenBranches = new Set();
-function markActiveBranch(pages) {
-  let containsCurrent = false;
-  for (const page of pages) {
-    const childIsActive = markActiveBranch(page.children || []);
-    const isActive = new URL(page.href, location.origin).pathname === currentPath;
-    if (page.children?.length && (isActive || childIsActive)) initiallyOpenBranches.add(page.href);
-    containsCurrent ||= isActive || childIsActive;
-  }
-  return containsCurrent;
-}
-markActiveBranch(navigationPages);
-
-function renderNavigation(pages, navIndex, path = []) {
-  const list = document.createElement('ul');
-  list.className = 'nav d-block list-unstyled mb-0';
-  list.dataset.depth = path.length + 1;
-  if (path.length) list.classList.add('border-start', 'ms-1', 'ps-1');
-  pages.forEach((page, index) => {
-    const item = document.createElement('li');
-    const row = document.createElement('div');
-    row.className = 'd-flex align-items-start';
-    const link = document.createElement('a');
-    link.className = 'nav-link d-block border-0 rounded-0 py-1 px-2 lh-sm fs-sm text-wrap text-break flex-grow-1 min-w-0';
-    link.textContent = page.title;
-    link.href = page.href;
-    if (new URL(page.href, location.origin).pathname === currentPath) {
-      link.classList.add('active');
-      link.setAttribute('aria-current', 'page');
-    }
-    row.append(link);
-    item.append(row);
-    if (page.children?.length) {
-      const childPath = [...path, index];
-      const branchClass = `navigation-branch-${childPath.join('-')}`;
-      const branch = document.createElement('div');
-      branch.id = `navigation-${navIndex}-${childPath.join('-')}`;
-      branch.className = `collapse transition-none ${branchClass}`;
-      branch.classList.toggle('show', initiallyOpenBranches.has(page.href));
-      branch.dataset.navigationHref = page.href;
-      branch.append(renderNavigation(page.children, navIndex, childPath));
-      const toggle = document.createElement('button');
-      toggle.type = 'button';
-      toggle.className = 'btn-icon btn-xs border-0 rounded-0 py-1 px-1 lh-sm fs-sm flex-shrink-0';
-      toggle.dataset.bsToggle = 'collapse';
-      toggle.dataset.bsTarget = `.${branchClass}`;
-      toggle.setAttribute('aria-controls', branch.id);
-      toggle.dataset.navigationToggle = page.href;
-      row.append(toggle);
-      updateBranchToggle(toggle, initiallyOpenBranches.has(page.href));
-      item.append(branch);
-    }
-    list.append(item);
-  });
-  return list;
-}
+// Update collapse toggle buttons (+/−) when Bootstrap opens/closes a branch.
 function updateBranchToggle(button, expanded) {
   button.textContent = expanded ? '−' : '+';
   button.setAttribute('aria-expanded', String(expanded));
-  const pageTitle = button.previousElementSibling.textContent;
+  const pageTitle = button.previousElementSibling?.textContent ?? '';
   button.setAttribute('aria-label', `${expanded ? 'Свернуть' : 'Развернуть'} «${pageTitle}»`);
 }
-document.querySelectorAll('[data-site-navigation]').forEach((nav, index) => {
-  nav.replaceChildren(renderNavigation(navigationPages, index));
+document.querySelectorAll('[data-site-navigation]').forEach((nav) => {
   for (const [eventName, expanded] of [['show.bs.collapse', true], ['hide.bs.collapse', false]]) {
     nav.addEventListener(eventName, (event) => {
       const href = event.target.dataset.navigationHref;
@@ -128,16 +68,6 @@ document.querySelectorAll('[data-site-navigation]').forEach((nav, index) => {
     });
   }
 });
-// Reset manual expansion when Back/Forward restores a cached document.
-window.addEventListener('pageshow', (event) => {
-  if (!event.persisted) return;
-  document.querySelectorAll('[data-navigation-href]').forEach((branch) => {
-    const instance = Collapse.getOrCreateInstance(branch);
-    if (initiallyOpenBranches.has(branch.dataset.navigationHref)) instance.show();
-    else instance.hide();
-  });
-});
-
 // Scroll only the menu, leaving the article position and keyboard focus intact.
 function centerActiveLink(menu) {
   const active = menu.querySelector('.nav-link.active');
@@ -177,34 +107,7 @@ document.querySelectorAll('[data-site-navigation]').forEach((nav) => menuSizeObs
 window.addEventListener('pageshow', scheduleMenuResize);
 fitDesktopMenus();
 
-// Build both versions of the contents from article headings in document order.
-const pageContent = document.querySelector('#pageContent');
-const headings = [...pageContent.querySelectorAll('h2, h3')];
-const usedIds = new Set([...document.querySelectorAll('[id]')].map((element) => element.id));
-headings.forEach((heading) => {
-  if (heading.id) return;
-  const slug = heading.textContent.trim().toLocaleLowerCase('ru')
-    .replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-+|-+$/g, '') || 'section';
-  let id = slug;
-  for (let suffix = 2; usedIds.has(id); suffix++) id = `${slug}-${suffix}`;
-  heading.id = id;
-  usedIds.add(id);
-});
-document.querySelectorAll('[data-page-toc]').forEach((nav) => {
-  nav.replaceChildren(...headings.map((heading) => {
-    const link = document.createElement('a');
-    link.className = 'nav-link justify-content-start py-1 px-2 lh-sm fs-sm text-wrap rounded-0';
-    if (heading.tagName === 'H3') {
-      link.classList.add('ms-3', 'border-start', 'border-2', 'border-top-0', 'border-end-0', 'border-bottom-0');
-    } else {
-      link.classList.add('border-0');
-    }
-    link.href = `#${encodeURIComponent(heading.id)}`;
-    link.textContent = heading.textContent.trim();
-    return link;
-  }));
-});
-
+// Search in sections and article list items.
 const searchInput = document.querySelector('#searchInput');
 const searchable = [...document.querySelectorAll('#main-content section[id]')].map((element) => ({
   id: element.id,
