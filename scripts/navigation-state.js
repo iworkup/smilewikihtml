@@ -25,8 +25,15 @@ export function restoreNavigation() {
   (nav.closest('.drawer-body') || nav).scrollTop = Number(previous.scroll) || 0;
   nav.querySelectorAll('[data-navigation-toggle]').forEach((button) => {
     const expanded = previous.open.includes(button.dataset.navigationToggle);
-    button.textContent = expanded ? '−' : '+';
+    const indicator = button.querySelector('[data-navigation-indicator]');
+    if (indicator) {
+      indicator.textContent = expanded ? '−' : '+';
+    } else {
+      button.textContent = expanded ? '−' : '+';
+    }
     button.setAttribute('aria-expanded', String(expanded));
-    button.setAttribute('aria-label', `${expanded ? 'Свернуть' : 'Развернуть'} «${button.previousElementSibling.textContent}»`);
+    const titleEl = button.querySelector('[data-navigation-title]');
+    const pageTitle = titleEl ? titleEl.textContent : (button.dataset.navigationTitle || '');
+    button.setAttribute('aria-label', `${expanded ? 'Свернуть' : 'Развернуть'} «${pageTitle}»`);
   });
 }

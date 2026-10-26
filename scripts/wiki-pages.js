@@ -5,18 +5,26 @@ import { navigationPages } from '../smilewikihtml/navigation.js';
 
 const allPages = navigationPages.flatMap(function flatten(page) {
   return [page, ...(page.children ?? []).flatMap(flatten)];
-}).filter((page) => page.href.endsWith('.html'));
+}).filter((page) => page.href && page.href.endsWith('.html'));
 const escape = (text) => text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 
 function buildNavigationHtml(pages, currentPath, navIndex, path = []) {
   return `<ul class="nav d-block list-unstyled mb-0${path.length ? ' border-start ms-1 ps-1' : ''}" data-depth="${path.length + 1}">${pages.map((page, index) => {
-    const isActive = page.href === currentPath;
-    const containsCurrent = (items) => items.some((item) => item.href === currentPath || containsCurrent(item.children || []));
-    const open = isActive || containsCurrent(page.children || []);
     const childPath = [...path, index].join('-');
     const branchClass = `navigation-branch-${childPath}`;
     const id = `navigation-${navIndex}-${childPath}`;
-    const toggle = page.children?.length ? `<button type="button" class="btn-icon btn-text btn-xs border-0 rounded-0 py-1 px-1 lh-sm fs-sm flex-shrink-0" data-bs-toggle="collapse" data-bs-target=".${branchClass}" aria-controls="${id}" data-navigation-toggle="${escape(page.href)}" aria-expanded="${open}" aria-label="${open ? 'Свернуть' : 'Развернуть'} «${escape(page.title)}»">${open ? '−' : '+'}</button>` : '';
+    // Section node (collapsible group, no page link)
+    if (page.type === 'section') {
+      const containsCurrent = (items) => items.some((item) => item.href === currentPath || (item.children && containsCurrent(item.children)));
+      const open = containsCurrent(page.children || []);
+      const sectionKey = `section:${page.id}`;
+      return `<li><div class="d-flex align-items-center"><button type="button" class="btn-text btn-xs border-0 rounded-0 py-1 px-2 lh-sm fs-sm text-wrap text-break w-100 text-start d-flex align-items-center justify-content-start gap-1" data-bs-toggle="collapse" data-bs-target=".${branchClass}" aria-controls="${id}" data-navigation-toggle="${escape(sectionKey)}" aria-expanded="${open}" aria-label="${open ? 'Свернуть' : 'Развернуть'} «${escape(page.title)}»"><span data-navigation-indicator class="flex-shrink-0">${open ? '−' : '+'}</span><span data-navigation-title>${escape(page.title)}</span></button></div><div id="${id}" class="collapse ${branchClass}${open ? ' show' : ''}" data-navigation-href="${escape(sectionKey)}">${buildNavigationHtml(page.children, currentPath, navIndex, [...path, index])}</div></li>`;
+    }
+    // Regular page node
+    const isActive = page.href === currentPath;
+    const containsCurrent = (items) => items.some((item) => item.href === currentPath || (item.children && containsCurrent(item.children)));
+    const open = isActive || containsCurrent(page.children || []);
+    const toggle = page.children?.length ? `<button type="button" class="btn-icon btn-text btn-xs border-0 rounded-0 py-1 px-1 lh-sm fs-sm flex-shrink-0" data-bs-toggle="collapse" data-bs-target=".${branchClass}" aria-controls="${id}" data-navigation-toggle="${escape(page.href)}" data-navigation-title="${escape(page.title)}" aria-expanded="${open}" aria-label="${open ? 'Свернуть' : 'Развернуть'} «${escape(page.title)}»">${open ? '−' : '+'}</button>` : '';
     const children = page.children?.length ? `<div id="${id}" class="collapse ${branchClass}${open ? ' show' : ''}" data-navigation-href="${escape(page.href)}">${buildNavigationHtml(page.children, currentPath, navIndex, [...path, index])}</div>` : '';
     return `<li><div class="d-flex align-items-start"><a class="nav-link d-block border-0 rounded-0 py-1 px-2 lh-sm fs-sm text-wrap text-break flex-grow-1 min-w-0${isActive ? ' active' : ''}"${isActive ? ' aria-current="page"' : ''} href="${escape(page.href)}">${escape(page.title)}</a>${toggle}</div>${children}</li>`;
   }).join('')}</ul>`;

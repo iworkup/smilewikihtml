@@ -52,9 +52,15 @@ document.querySelector('#userMenu').addEventListener('click', (event) => {
 
 // Update collapse toggle buttons (+/−) when Bootstrap opens/closes a branch.
 function updateBranchToggle(button, expanded) {
-  button.textContent = expanded ? '−' : '+';
+  const indicator = button.querySelector('[data-navigation-indicator]');
+  if (indicator) {
+    indicator.textContent = expanded ? '−' : '+';
+  } else {
+    button.textContent = expanded ? '−' : '+';
+  }
   button.setAttribute('aria-expanded', String(expanded));
-  const pageTitle = button.previousElementSibling?.textContent ?? '';
+  const titleEl = button.querySelector('[data-navigation-title]');
+  const pageTitle = titleEl ? titleEl.textContent : (button.dataset.navigationTitle || '');
   button.setAttribute('aria-label', `${expanded ? 'Свернуть' : 'Развернуть'} «${pageTitle}»`);
 }
 document.querySelectorAll('[data-site-navigation]').forEach((nav) => {
