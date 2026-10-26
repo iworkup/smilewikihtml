@@ -1,6 +1,6 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 
-/* Approved customization: hierarchical numbering without list indentation. */
+/* Approved customization: hierarchical numbering with aligned wrapped text. */
 @layer custom {
   #pageContent ol {
     list-style: none;
@@ -10,9 +10,16 @@
 
   #pageContent ol > li {
     counter-increment: ordered-item;
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    column-gap: 0.5ch;
+  }
+
+  #pageContent ol > li > :is(ol, ul) {
+    grid-column: 1 / -1;
   }
 
   #pageContent ol > li::before {
-    content: counters(ordered-item, ".") ". ";
+    content: counters(ordered-item, ".") ".";
   }
 }
