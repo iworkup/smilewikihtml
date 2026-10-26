@@ -1,3 +1,4 @@
+import { navigationPages } from './navigation.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 const themeLabels = { light: 'светлая', dark: 'тёмная', auto: 'системная' };
@@ -52,29 +53,7 @@ document.querySelector('#userMenu').addEventListener('click', (event) => {
 });
 
 // Shared page hierarchy for desktop and mobile, including a ten-level example.
-const navigationPages = [
-  { title: 'Главная', href: '/smilewikihtml/', current: true },
-  { title: 'Категории статей и подробные руководства по работе с базой знаний', href: '#articles', children: [
-    { title: 'База знаний: организация материалов и навигация по разделам проекта', href: '#wiki-intro', children: [
-      { title: 'Работа с wiki: пошаговые инструкции для новых участников сообщества', href: '#start', children: [
-        { title: 'Редактирование и совместная подготовка подробных энциклопедических статей', href: '#editing', children: [
-          { title: 'Оформление статей с длинными заголовками, примерами и пояснениями', href: '#editing', children: [
-            { title: 'Источники информации: поиск, оценка достоверности и правила цитирования', href: '#sources', children: [
-              { title: 'Проверка внешних ссылок и восстановление недоступных первоисточников', href: '#sources', children: [
-                { title: 'Обсуждение спорных утверждений и согласование изменений с сообществом', href: '#community', children: [
-                  { title: 'Часто задаваемые вопросы о сложных случаях оформления материалов', href: '#faq', children: [
-                    { title: 'Ответы и рекомендации · уровень 10 · ПроверкаОченьДлинногоНазванияСтраницыБезПробеловДляГраничногоСлучая', href: '#faq' },
-                  ] },
-                ] },
-              ] },
-            ] },
-          ] },
-        ] },
-      ] },
-    ] },
-  ] },
-  { title: 'О проекте SmileWiki, его участниках и принципах развития', href: '#about' },
-];
+
 function renderNavigation(pages, depth = 1) {
   const list = document.createElement('ul');
   list.className = 'list-unstyled mb-0';
@@ -86,7 +65,7 @@ function renderNavigation(pages, depth = 1) {
     link.className = 'nav-link d-block border-0 rounded-0 py-1 px-1 lh-sm fs-sm text-wrap text-break';
     link.textContent = page.title;
     link.href = page.href;
-    if (page.current) {
+    if (new URL(page.href, location.origin).pathname === location.pathname.replace(/index\.html$/, '')) {
       link.classList.add('active', 'fw-semibold');
       link.setAttribute('aria-current', 'page');
     }

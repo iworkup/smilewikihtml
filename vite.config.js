@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import wikiPages from './scripts/wiki-pages.js';
 import lanHost from './scripts/lan-host.js';
 
 export default defineConfig({
@@ -20,5 +21,5 @@ export default defineConfig({
     strictPort: true,
     allowedHosts: ['smilewikihtml.local'],
   },
-  plugins: [lanHost()],
+  plugins: [lanHost(), wikiPages()],
 });

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Часто задаваемые вопросы о сложных случаях оформления материалов — Smile Wiki HTML</title>
+  <link rel="icon" href="data:,">
+  <script>
+    try {
+      const theme = localStorage.getItem('smilewiki-theme');
+      if (theme === 'light' || theme === 'dark') document.documentElement.dataset.bsTheme = theme;
+    } catch {}
+  </script>
+  <script type="module" crossorigin src="/smilewikihtml/assets/index-BMLwiXEG.js"></script>
+  <link rel="stylesheet" crossorigin href="/smilewikihtml/assets/index-CmdJYvuw.css">
+</head>
+<body class="d-flex flex-column min-vh-100" data-bs-spy="scroll" data-bs-target="#pageNav">
+  <!-- Topbar -->
+  <nav class="navbar lg:navbar-expand bg-1 z-fixed" aria-label="Верхняя панель">
+    <div class="container gap-2">
+      <a class="navbar-brand" href="/smilewikihtml/">Smile Wiki HTML</a>
+      <div class="d-flex align-items-center gap-2 ms-auto">
+        <button class="btn-icon btn-text theme-secondary" type="button" data-bs-toggle="dialog" data-bs-target="#searchDialog" aria-label="Поиск по странице">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/></svg>
+        </button>
+        <div>
+          <button class="btn-icon btn-text theme-secondary" type="button" id="themeMenuToggle" data-bs-toggle="menu" data-bs-placement="bottom-end" aria-expanded="false" aria-controls="themeMenu" aria-label="Цветовая тема: системная">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16"/></svg>
+          </button>
+          <div class="menu" id="themeMenu" aria-labelledby="themeMenuToggle">
+            <button class="menu-item" type="button" data-theme="light" aria-pressed="false">Светлая</button>
+            <button class="menu-item" type="button" data-theme="dark" aria-pressed="false">Тёмная</button>
+            <button class="menu-item" type="button" data-theme="auto" aria-pressed="true">Системная</button>
+          </div>
+        </div>
+        <div>
+          <button class="btn-text theme-secondary d-inline-flex align-items-center gap-2" type="button" id="userMenuToggle" data-bs-toggle="menu" data-bs-placement="bottom-end" aria-expanded="false" aria-controls="userMenu">
+            <svg id="loginIcon" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M10 3.5a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 1 1 0v2A1.5 1.5 0 0 1 9.5 14h-8A1.5 1.5 0 0 1 0 12.5v-9A1.5 1.5 0 0 1 1.5 2h8A1.5 1.5 0 0 1 11 3.5v2a.5.5 0 0 1-1 0z"/><path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/></svg>
+            <svg id="userIcon" class="d-none" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/></svg>
+            <span id="userName" class="text-break">Авторизация</span>
+          </button>
+          <div class="menu" id="userMenu" aria-labelledby="userMenuToggle">
+            <button class="menu-item" type="button" data-auth-action="login">Войти</button>
+            <button class="menu-item" type="button" data-auth-action="register">Регистрация</button>
+            <button class="menu-item d-none" type="button" data-auth-action="profile">Профиль</button>
+            <hr class="menu-divider d-none" id="userMenuDivider">
+            <button class="menu-item d-none" type="button" data-auth-action="logout">Выйти</button>
+          </div>
+        </div>
+      </div>
+      <button class="btn-icon navbar-toggler lg:d-none" type="button" data-bs-toggle="drawer" data-bs-target="#sidebarDrawer" aria-controls="sidebarDrawer" aria-expanded="false" aria-label="Открыть навигацию">
+        <span class="navbar-toggler-icon" aria-hidden="true"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- .container > .row с левой навигацией + контентом -->
+  <main class="container py-4 flex-grow-1" id="main-content">
+    <p id="topbarStatus" class="d-none alert theme-info" role="status"></p>
+    <div class="row g-4">
+
+      <!-- Left sidebar navigation — mobile: drawer, lg: колонка -->
+      <dialog class="drawer drawer-start" tabindex="-1" id="sidebarDrawer" aria-label="Разделы сайта">
+        <div class="drawer-header justify-content-end">
+          <button type="button" class="btn-close" data-bs-dismiss="drawer" aria-label="Закрыть"></button>
+        </div>
+        <div class="drawer-body">
+          <nav data-site-navigation aria-label="Страницы сайта"></nav>
+        </div>
+      </dialog>
+
+      <!-- Desktop sidebar -->
+      <aside class="d-none lg:d-block lg:col-2" aria-label="Навигация по разделам">
+        <nav class="sticky-top pt-3" aria-label="Разделы сайта">
+          <div data-site-navigation></div>
+        </nav>
+      </aside>
+
+      <!-- Main content area -->
+      <div class="col-12 lg:col-8" id="pageContent">
+        <button class="btn-outline theme-secondary lg:d-none mb-3" type="button" data-bs-toggle="drawer" data-bs-target="#tocDrawer" aria-controls="tocDrawer">На этой странице</button>
+        <h1 class="fs-3xl fw-bold text-break">Часто задаваемые вопросы о сложных случаях оформления материалов</h1>
+        <section class="mb-3" id="overview">
+          <h2 class="fs-xl">Об этой странице</h2>
+          <p>Демонстрационная отдельная страница wiki: Часто задаваемые вопросы о сложных случаях оформления материалов. Замените этот текст содержимым статьи.</p>
+          <p><a href="/smilewikihtml/">Главная страница</a></p>
+        </section>
+      </div>
+      <aside class="d-none lg:d-block lg:col-2" aria-label="Оглавление страницы">
+        <nav id="pageNav" class="nav flex-column sticky-top pt-3">
+          <div class="nav flex-column" data-page-toc></div>
+        </nav>
+      </aside>
+    </div>
+  </main>
+
+  <dialog class="dialog dialog-lg dialog-scrollable" id="searchDialog" aria-labelledby="searchDialogTitle">
+    <div class="dialog-header">
+      <h2 class="dialog-title fs-xl" id="searchDialogTitle">Поиск по странице</h2>
+      <button class="btn-close" type="button" data-bs-dismiss="dialog" aria-label="Закрыть поиск"></button>
+    </div>
+    <div class="dialog-body">
+      <form class="d-flex gap-2 mb-3" role="search" id="siteSearch">
+        <label class="visually-hidden" for="searchInput">Поисковый запрос</label>
+        <input class="form-control" type="search" id="searchInput" placeholder="Поиск по Smile Wiki HTML" autocomplete="off" autofocus>
+        <button class="btn-solid theme-primary" type="submit">Найти</button>
+      </form>
+    <section id="searchResults" class="mb-3 d-none" aria-labelledby="searchResultsTitle">
+      <div>
+        <h2 id="searchResultsTitle" class="fs-xl">Результаты поиска</h2>
+        <p id="searchSummary" role="status"></p>
+        <ul id="searchResultList"></ul>
+      </div>
+    </section>
+    </div>
+  </dialog>
+  <dialog class="drawer drawer-end" id="tocDrawer" aria-label="Оглавление страницы" tabindex="-1">
+    <div class="drawer-header justify-content-end">
+      <button class="btn-close" type="button" data-bs-dismiss="drawer" aria-label="Закрыть оглавление"></button>
+    </div>
+    <div class="drawer-body">
+      <nav class="nav flex-column" aria-label="Оглавление" data-page-toc></nav>
+    </div>
+  </dialog>
+
+  <!-- Footer -->
+  <footer class="bg-1 border-top py-3 mt-auto">
+    <div class="container d-flex flex-wrap justify-content-between align-items-center">
+      <span class="fs-sm">&copy; 2026 Smile Wiki HTML</span>
+      <span class="fs-sm">Bootstrap 6 &middot; Vite</span>
+    </div>
+  </footer>
+</body>
+</html>
