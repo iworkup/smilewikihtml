@@ -57,9 +57,11 @@ function injectNavigationAndToc(html, currentPath) {
 
 function renderArticleContent(template, page) {
   const title = escape(page.title);
+  const tocButton = template.match(/<button\b[^>]*data-bs-target="#tocDrawer"[^>]*>[\s\S]*?<\/button>/)?.[0];
+  if (!tocButton) throw new Error('В шаблоне отсутствует кнопка оглавления');
   return template.replace(/<title>.*?<\/title>/s, `<title>${title} — Smile Wiki HTML</title>`)
     .replace(/(<div[^>]+id="pageContent">)[\s\S]*?(\n      <\/div>)/, `$1
-        <button class="btn-outline theme-secondary lg:d-none mb-3" type="button" data-bs-toggle="drawer" data-bs-target="#tocDrawer" aria-controls="tocDrawer">На этой странице</button>
+        ${tocButton}
         <h1 class="fs-3xl fw-bold text-break">${title}</h1>
         <section class="mb-3" id="overview">
           <h2 class="fs-xl">Об этой странице</h2>
