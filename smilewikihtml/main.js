@@ -67,11 +67,11 @@ headings.forEach((heading) => {
 document.querySelectorAll('[data-page-toc]').forEach((nav) => {
   nav.replaceChildren(...headings.map((heading) => {
     const link = document.createElement('a');
-    link.className = 'nav-link justify-content-start py-1 px-2 lh-sm fs-sm text-wrap rounded-0 bg-transparent';
+    link.className = 'nav-link justify-content-start py-1 px-2 lh-sm fs-sm text-wrap rounded-0';
     if (heading.tagName === 'H3') {
       link.classList.add('ms-3', 'border-start', 'border-2', 'border-top-0', 'border-end-0', 'border-bottom-0');
     } else {
-      link.classList.add('border-0', 'fw-semibold');
+      link.classList.add('border-0');
     }
     link.href = `#${encodeURIComponent(heading.id)}`;
     link.textContent = heading.textContent.trim();
