@@ -67,15 +67,26 @@ function renderArticleContent(template, page) {
   const title = escape(page.title);
   const pageActions = template.match(/<div\b[^>]*id="pageActions"[^>]*>[\s\S]*?<\/div>/)?.[0];
   if (!pageActions) throw new Error('В шаблоне отсутствуют кнопки страницы');
+  const content = page.href === '/smilewikihtml/text.html'
+    ? `<p>Примеры текстовых элементов, используемых в проекте.</p>
+        <section class="mb-3" id="headings">
+          <h2>Заголовки</h2>
+          <p>Шесть уровней заголовков: от h1 до h6. Под каждым примером приведён его HTML-код.</p>
+          ${[1, 2, 3, 4, 5, 6].map((level) => {
+            const example = `<h${level}>Заголовок ${level}-го уровня</h${level}>`;
+            return `<div class="mb-4">${example}<pre class="p-3 bg-2 border rounded"><code>${escape(example)}</code></pre></div>`;
+          }).join('\n          ')}
+        </section>`
+    : `<section class="mb-3" id="overview">
+          <h2 class="fs-xl">Об этой странице</h2>
+          <p class="text-break">Демонстрационная отдельная страница wiki: ${title}. Замените этот текст содержимым статьи.</p>
+          <p><a href="/smilewikihtml/">Главная страница</a></p>
+        </section>`;
   return template.replace(/<title>.*?<\/title>/s, `<title>${title} — Smile Wiki HTML</title>`)
     .replace(/(<div[^>]+id="pageContent">)[\s\S]*?(\n      <\/div>)/, `$1
         ${pageActions}
         <h1 class="fs-3xl fw-bold text-break">${title}</h1>
-        <section class="mb-3" id="overview">
-          <h2 class="fs-xl">Об этой странице</h2>
-          <p class="text-break">Демонстрационная отдельная страница wiki: ${title}. Замените этот текст содержимым статьи.</p>
-          <p><a href="/smilewikihtml/">Главная страница</a></p>
-        </section>$2`);
+        ${content}$2`);
 }
 
 // ── Plugin ──────────────────────────────────────────────────────────────────
