@@ -69,13 +69,16 @@ document.querySelectorAll('[data-site-navigation]').forEach((nav) => {
   }
 });
 // Scroll only the menu, leaving the article position and keyboard focus intact.
-function centerActiveLink(menu) {
+function centerActiveLink(menu, smooth = false) {
   const active = menu.querySelector('.nav-link.active');
   if (!active || !menu.clientHeight) return;
   const menuRect = menu.getBoundingClientRect();
   const linkRect = active.getBoundingClientRect();
-  menu.scrollTop += linkRect.top + linkRect.height / 2
-    - menuRect.top - menu.clientTop - menu.clientHeight / 2;
+  menu.scrollTo({
+    top: menu.scrollTop + linkRect.top + linkRect.height / 2
+      - menuRect.top - menu.clientTop - menu.clientHeight / 2,
+    behavior: smooth && !matchMedia('(prefers-reduced-motion: reduce)').matches ? 'smooth' : 'instant',
+  });
 }
 
 // Keep each desktop menu inside the visible viewport, including above the fold.
@@ -148,7 +151,7 @@ async function settleNavigation() {
     menu.scrollTop = Number(nav.dataset.navigationScroll) || 0;
   }
   if (!transferred.length) {
-    desktopMenus.forEach(centerActiveLink);
+    desktopMenus.forEach((menu) => centerActiveLink(menu));
     return;
   }
   // Paint the previous tree first; only the destination document animates it.
@@ -158,16 +161,7 @@ async function settleNavigation() {
     .map((branch) => Collapse.getOrCreateInstance(branch, { toggle: false }).hide()));
   await Promise.all(branches.filter((branch) => branch.dataset.navigationDesired === 'true' && !branch.classList.contains('show'))
     .map((branch) => Collapse.getOrCreateInstance(branch, { toggle: false }).show()));
-  desktopMenus.forEach((menu) => {
-    const active = menu.querySelector('.nav-link.active');
-    if (!active) return;
-    const rect = active.getBoundingClientRect();
-    const bounds = menu.getBoundingClientRect();
-    if (rect.top < bounds.top || rect.bottom > bounds.bottom) {
-      menu.scrollTo({ top: menu.scrollTop + rect.top - bounds.top - (menu.clientHeight - rect.height) / 2,
-        behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
-    }
-  });
+  desktopMenus.forEach((menu) => centerActiveLink(menu, true));
 }
 settleNavigation();
 
@@ -227,7 +221,14 @@ for (const id of ['searchDialog', 'sidebarDrawer', 'tocDrawer']) {
 
 // ScrollSpy changes the active section as the article scrolls.
 const pageNav = document.querySelector('#pageNav');
-new MutationObserver(scheduleMenuResize).observe(pageNav, {
+let activeSectionHref;
+new MutationObserver(() => {
+  scheduleMenuResize();
+  const href = pageNav.querySelector('.nav-link.active')?.getAttribute('href');
+  if (!href || href === activeSectionHref) return;
+  activeSectionHref = href;
+  requestAnimationFrame(() => centerActiveLink(pageNav, true));
+}).observe(pageNav, {
   subtree: true, attributes: true, attributeFilter: ['class'],
 });
 for (const id of ['sidebarDrawer', 'tocDrawer']) {
