@@ -1,3 +1,4 @@
+import './code-blocks.js';
 import { Collapse } from 'bootstrap';
 const themeLabels = { light: 'светлая', dark: 'тёмная', auto: 'системная' };
 let selectedTheme = 'auto';

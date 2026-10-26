@@ -1,5 +1,6 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { codeToHtml } from 'shiki';
 import { restoreNavigation } from './navigation-state.js';
 import { navigationPages } from '../smilewikihtml/navigation.js';
 
@@ -64,7 +65,7 @@ function injectNavigationAndToc(html, currentPath) {
 
 // ── Page content replacement for article pages ──────────────────────────────
 
-function renderArticleContent(template, page) {
+async function renderArticleContent(template, page) {
   const title = escape(page.title);
   const pageActions = template.match(/<div\b[^>]*id="pageActions"[^>]*>[\s\S]*?<\/div>/)?.[0];
   if (!pageActions) throw new Error('В шаблоне отсутствуют кнопки страницы');
@@ -76,7 +77,18 @@ function renderArticleContent(template, page) {
           ${[1, 2, 3, 4, 5, 6].map((level) => {
             return `<h${level} data-typography-example>Заголовок ${level}-го уровня</h${level}>`;
           }).join('\n          ')}
-          <pre class="mt-4 p-3 bg-2 border rounded"><code>${[1, 2, 3, 4, 5, 6].map((level) => `<span class="fg-primary">${escape(`<h${level}>`)}</span>Заголовок ${level}-го уровня<span class="fg-primary">${escape(`</h${level}>`)}</span>`).join('\n')}</code></pre>
+          <div class="mt-4 border rounded overflow-hidden" data-code-block>
+            <div class="d-flex align-items-center justify-content-between gap-2 p-2 bg-2 border-bottom">
+              <span class="font-monospace fs-sm">HTML</span>
+              <button type="button" class="btn btn-sm btn-outline theme-secondary" data-copy-code aria-label="Скопировать HTML-код заголовков">Копировать</button>
+            </div>
+            ${await codeToHtml([1, 2, 3, 4, 5, 6].map((level) => `<h${level}>Заголовок ${level}-го уровня</h${level}>`).join('\n'), {
+              lang: 'html',
+              theme: 'material-theme-palenight',
+              transformers: [{ pre(node) { node.properties.class += ' m-0 p-3 overflow-auto'; node.properties.tabindex = 0; node.properties['aria-label'] = 'HTML-код заголовков'; } }],
+            })}
+            <div class="px-2 fs-sm" role="status" aria-live="polite" data-copy-status></div>
+          </div>
         </section>`
     : `<section class="mb-3" id="overview">
           <h2 class="fs-xl">Об этой странице</h2>
@@ -111,7 +123,7 @@ export default function wikiPages() {
         if (!page) return next();
         try {
           const template = await readFile(resolve(server.config.root, 'index.html'), 'utf8');
-          const articleHtml = renderArticleContent(template, page);
+          const articleHtml = await renderArticleContent(template, page);
           const html = await server.transformIndexHtml(page.href, articleHtml);
           response.setHeader('Content-Type', 'text/html; charset=utf-8');
           response.end(html);
@@ -121,7 +133,7 @@ export default function wikiPages() {
     async writeBundle() {
       const template = await readFile(resolve(outputDirectory, 'index.html'), 'utf8');
       await Promise.all(allPages.map(async (page) => {
-        const articleHtml = renderArticleContent(template, page);
+        const articleHtml = await renderArticleContent(template, page);
         const pagePath = navHrefPath(page.href);
         const fullHtml = injectNavigationAndToc(articleHtml, pagePath);
         await writeFile(resolve(outputDirectory, page.href.split('/').at(-1)), fullHtml);
