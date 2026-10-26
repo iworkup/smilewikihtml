@@ -117,7 +117,6 @@ async function renderArticleContent(template, page) {
           <h2>Стандартное оформление текста</h2>
           <p>Параграфы, перенос строки и стандартные HTML-элементы оформления текста.</p>
           ${await renderCodeCard(inlineTextExample, inlineTextExample, 'Стандартное оформление текста')}
-          <p class="mt-3">Тег <code>&lt;p&gt;</code> создаёт отдельный параграф, а <code>&lt;br&gt;</code> переносит строку внутри него. Используйте смысловые теги по назначению: <code>&lt;del&gt;</code> и <code>&lt;ins&gt;</code> отмечают изменения, <code>&lt;strong&gt;</code> — важность, <code>&lt;em&gt;</code> — логическое ударение.</p>
         </section>`
     : `<section class="mb-3" id="overview">
           <h2 class="fs-xl">Об этой странице</h2>
